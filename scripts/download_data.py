@@ -4,7 +4,8 @@ import os
 Script to download data for the project.
 """
 
-RAW_PATH = "data/raw"
+# Define RAW_PATH to target the project-level data/raw directory
+RAW_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/raw")
 
 def ensure_dirs():
     """Ensure required directories exist before writing files."""
