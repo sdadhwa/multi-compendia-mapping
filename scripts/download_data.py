@@ -53,10 +53,26 @@ if __name__ == "__main__":
 
     # Dictionary of files to download (Replace with actual URLs)
     files_to_download = {
-        "genome1.tsv": "https://example.com/genome1.tsv",
-        "genome2.tsv": "https://example.com/genome2.tsv",
-        "genome3.tsv": "https://example.com/genome3.tsv",
-    }
+        # Tumor Compendium (PolyA)
+    "tumor_polyA_expression.tsv": "https://example.com/path/to/tumor_polyA_expression.tsv",
+    "tumor_polyA_clinical.tsv": "https://example.com/path/to/tumor_polyA_clinical.tsv",
+
+    # Tumor Compendium (Ribo)
+    "tumor_ribo_expression.tsv": "https://example.com/path/to/tumor_ribo_expression.tsv",
+    "tumor_ribo_clinical.tsv": "https://example.com/path/to/tumor_ribo_clinical.tsv",
+
+    # Cell Line Compendium (PolyA)
+    "cell_line_polyA_expression.tsv": "https://example.com/path/to/cell_line_polyA_expression.tsv",
+    "cell_line_polyA_clinical.tsv": "https://example.com/path/to/cell_line_polyA_clinical.tsv",
+
+    # PDX Compendium (PolyA)
+    "PDX_polyA_expression.tsv": "https://example.com/path/to/PDX_polyA_expression.tsv",
+    "PDX_polyA_clinical.tsv": "https://example.com/path/to/PDX_polyA_clinical.tsv",
+
+    # PDX Compendium (Ribo)
+    "PDX_ribo_expression.tsv": "https://example.com/path/to/PDX_ribo_expression.tsv",
+    "PDX_ribo_clinical.tsv": "https://example.com/path/to/PDX_ribo_clinical.tsv",
+}
 
     download_files(files_to_download)
     # TODO: Use requests library to download data here.
