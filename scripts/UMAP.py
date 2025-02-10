@@ -11,6 +11,7 @@ from matplotlib.pyplot import plt
 import seaborn as sns
 import pandas as pd
 import umap
+from IPython import get_ipython
 get_ipython().run_line_magic('matplotlib', 'inline')
 
 # Map seaborn for plotting
@@ -63,8 +64,8 @@ metadata_columns = [
 ]
 
 # Extract numerical gene expression values
-expression_data = df_expr.drop(columns=metadata_cols)  # Gene expression only
-metadata = df_expr[metadata_cols] # Store metadata separately
+expression_data = df_expr.drop(columns=metadata_columns)  # Gene expression only
+metadata = df_expr[metadata_columns] # Store metadata separately
 
 # Drop missing values if needed
 expression_data = expression_data.dropna()
