@@ -44,7 +44,7 @@ def process_expression_compendium(expression_dict):
         filtered_datasets.append(filtered_expression_df)
 
     # Merge all processed datasets into a single DataFrame
-    compendia_df = pd.concat(filtered_datasets, axis=1)  # Merge all gene expression data
+    compendia_df = pd.concat(filtered_datasets, axis=0)  # Merge all gene expression data
 
     return compendia_df
 
