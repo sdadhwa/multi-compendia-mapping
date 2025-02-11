@@ -5,6 +5,8 @@ import numpy as np
 LOWEST_VARIANCE_PERCENTILE = 20
 
 def process_expression_compendium(expression_dict):
+    # TODO Handle Sample Id column (non numeric column) safely. See pytests for examples on data frame and traceback.
+
     """
     Process a dictionary of gene expression dataframes and return a compendium dataframe.
 
