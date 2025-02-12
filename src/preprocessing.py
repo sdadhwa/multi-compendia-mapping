@@ -13,6 +13,14 @@ def process_expression_compendium(expression_dict, variance_threshold=None, mini
         minimum_expression (float): The threshold for minimum expression. Units: mean log2(TPM+1). Default None, no
             filtering.
     """
+
+    # Add a column to each dataframe with the compendium name
+    compendium_labeled_dfs = []
+    for compendium_name, df in expression_dict.items():
+        df["compendium"] = compendium_name
+        compendium_labeled_dfs.append(df)
+
+    # Concatenate all dataframes into a single dataframe
     exp_df = pd.concat(expression_dict.values())
 
     # Separate non-numeric columns
