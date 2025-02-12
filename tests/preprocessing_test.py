@@ -43,6 +43,16 @@ def expression_dict():
 
     return expression_dict
 
+def verify_processed_compendium(processed_compendium):
+    """
+    Verify that the processed compendium has the expected format for patient IDs and compendium column. These should
+    never be removed or altered by functionality the processing function. This function should be called after
+    doing processing on the expression_dict fixture.
+    """
+    patients = ["Patient_A", "Patient_B", "Patient_C", "Patient_D", "Patient_E", "Patient_F"]
+    assert all(patient in processed_compendium.index for patient in patients)
+    assert "compendium" in processed_compendium.columns
+
 def test_format_process_expression_compendium(expression_dict):
     """
     Test the process_expression_compendium function to ensure it concatenates two compendia into one returns a
@@ -57,49 +67,32 @@ def test_format_process_expression_compendium(expression_dict):
     assert processed_compendium.shape == (6, 11)
 
     # Check that the indexes are the same as the patient IDs
-    patients = ["Patient_A", "Patient_B", "Patient_C", "Patient_D", "Patient_E", "Patient_F"]
-    assert all(patient in processed_compendium.index for patient in patients)
-    assert "compendium" in processed_compendium.columns
+    verify_processed_compendium(processed_compendium)
     for i in range(1, 11):
         assert f"gene_{i}" in processed_compendium.columns
 
-def test_min_exp_process_expression_compendium():
-    """
-    Test the min_expression argument of the process_expression_compendium function to ensure it filters out genes with
-    mean expressions below the threshold.
-    """
-    expression_dict = {
-        "compendium1": pd.DataFrame({
-            "SampleID": ["Patient_A", "Patient_B", "Patient_C"],
-            "gene_1": [1, 1, 1],
-            "gene_2": [3, 3, 3],
-            "gene_3": [2, 2, 2],
-            "gene_4": [0, 0, 0],
-        }),
-        "compendium2": pd.DataFrame({
-            "SampleID": ["Patient_D", "Patient_E", "Patient_F"],
-            "gene_1": [1, 1, 1],
-            "gene_2": [3, 3, 3],
-            "gene_3": [2, 2, 2],
-            "gene_4": [0, 0, 0],
-        })
-    }
+def test_min_exp_process_expression_compendium(expression_dict):
+    # Calculate the mean expressions for each gene
+    mean_expressions = pd.concat(expression_dict.values()).mean()
 
-    # Call the function to test
-    mean_gene1 = expression_dict["compendium1"]["gene_1"].mean()
-    mean_gene2 = expression_dict["compendium1"]["gene_2"].mean()
-    mean_gene3 = expression_dict["compendium1"]["gene_3"].mean()
-    mean_gene4 = expression_dict["compendium1"]["gene_4"].mean()
+    # Determine the two genes with the lowest mean expressions
+    lowest_mean_genes = mean_expressions.nsmallest(2).index
 
-    # Make sure that gene 1 and gene 4 are filtered out if the minimum expression is set to the mean of gene 1
-    assert mean_gene1 > mean_gene4
-    assert mean_gene1 < mean_gene2 and mean_gene1 < mean_gene3
+    # Call the function to test with the minimum expression set to the highest mean of the two lowest mean genes
+    minimum_expression = mean_expressions[lowest_mean_genes].max()
+    processed_compendium = process_expression_compendium(expression_dict, minimum_expression=minimum_expression)
 
-    processed_compendium = process_expression_compendium(expression_dict, minimum_expression=mean_gene1)
+    # Processed compendium should not contain the two genes with the lowest mean expressions
+    for gene in lowest_mean_genes:
+        assert gene not in processed_compendium.columns
 
-    # Processed compendium should not contain gene_4 or gene_1 columns
-    assert "gene_1" not in processed_compendium.columns
-    assert "gene_4" not in processed_compendium.columns
+    # Processed compendium should still contain all other genes
+    for gene in mean_expressions.index:
+        if gene not in lowest_mean_genes:
+            assert gene in processed_compendium.columns
+
+    # Make sure structure is still correct
+    verify_processed_compendium(processed_compendium)
 
 def test_min_var_process_expression_compendium():
     """
