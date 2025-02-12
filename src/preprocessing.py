@@ -10,7 +10,7 @@ def process_expression_compendium(expression_dict, variance_threshold=None, mini
         expression_dict (dict): Dictionary where keys are compendium names and values are numpy dataframes containing
             gene expression data. Each column is a gene and each row is a sample.
         variance_threshold (int): What percentile of low variance genes to remove. Default None, no filtering.
-        minimum_expression (float): The threshold for minimum expression. Units: mean log2(TPM+1). Default None, no
+        minimum_expression (float): The threshold for minimum expression exclusive. Units: mean log2(TPM+1). Default None, no
             filtering.
     """
 
