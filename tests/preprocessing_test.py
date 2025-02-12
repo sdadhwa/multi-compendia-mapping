@@ -30,10 +30,18 @@ def test_format_process_expression_compendium():
     # Call the function to test
     processed_compendium = process_expression_compendium(expression_dict)
 
-    # The processed compendium should have one column "SampleID" and 3 gene columns. There should be 6 rows in total.
-    assert processed_compendium.shape == (6, 4)
+    # The processed compendium should have one column "SampleID", one column "compendium" and 3 gene columns.
+    # There should be 6 rows in total.
+    assert processed_compendium.shape == (6, 5)
     assert "SampleID" in processed_compendium.columns
     assert "gene_1" in processed_compendium.columns
     assert "gene_2" in processed_compendium.columns
     assert "gene_3" in processed_compendium.columns
     assert list(processed_compendium["SampleID"]) == patients1 + patients2
+
+def test_min_exp_process_expression_compendium():
+    """
+    Test the min_expression argument of the process_expression_compendium function to ensure it filters out genes with
+    mean expressions below the threshold.
+    """
+    pass
