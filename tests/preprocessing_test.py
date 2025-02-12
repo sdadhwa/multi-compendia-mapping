@@ -44,4 +44,35 @@ def test_min_exp_process_expression_compendium():
     Test the min_expression argument of the process_expression_compendium function to ensure it filters out genes with
     mean expressions below the threshold.
     """
-    pass
+    expression_dict = {
+        "compendium1": pd.DataFrame({
+            "SampleID": ["Patient_A", "Patient_B", "Patient_C"],
+            "gene_1": [1, 1, 1],
+            "gene_2": [3, 3, 3],
+            "gene_3": [2, 2, 2],
+            "gene_4": [0, 0, 0],
+        }),
+        "compendium2": pd.DataFrame({
+            "SampleID": ["Patient_D", "Patient_E", "Patient_F"],
+            "gene_1": [1, 1, 1],
+            "gene_2": [3, 3, 3],
+            "gene_3": [2, 2, 2],
+            "gene_4": [0, 0, 0],
+        })
+    }
+
+    # Call the function to test
+    mean_gene1 = expression_dict["compendium1"]["gene_1"].mean()
+    mean_gene2 = expression_dict["compendium1"]["gene_2"].mean()
+    mean_gene3 = expression_dict["compendium1"]["gene_3"].mean()
+    mean_gene4 = expression_dict["compendium1"]["gene_4"].mean()
+
+    # Make sure that gene 1 and gene 4 are filtered out if the minimum expression is set to the mean of gene 1
+    assert mean_gene1 > mean_gene4
+    assert mean_gene1 < mean_gene2 and mean_gene1 < mean_gene3
+
+    processed_compendium = process_expression_compendium(expression_dict, minimum_expression=mean_gene1)
+
+    # Processed compendium should not contain gene_4 or gene_1 columns
+    assert "gene_1" not in processed_compendium.columns
+    assert "gene_4" not in processed_compendium.columns
