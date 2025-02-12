@@ -1,54 +1,40 @@
-import scanpy as sc
 import pandas as pd
 import numpy as np
 
-LOWEST_VARIANCE_PERCENTILE = 20
-
-def process_expression_compendium(expression_dict):
-    # TODO Handle Sample Id column (non numeric column) safely. See pytests for examples on data frame and traceback.
-
+def process_expression_compendium(expression_dict, variance_threshold=20, minimum_expression=0):
     """
-    Process a dictionary of gene expression dataframes and return a compendium dataframe.
+    Build a single data frame out of multiple gene expression data frames. Then remove genes with the lowest variance
+    and expressions. Finally, return the data frame.
 
     Args:
-        expression_dict (dict): Dictionary where keys are compendium names and values are dataframes containing gene expression data.
+        expression_dict (dict): Dictionary where keys are compendium names and values are numpy dataframes containing
+        gene expression data. Each column is a gene and each row is a sample.
 
-    Returns:
-        pd.DataFrame: Compendia dataframe with filtered gene expression data and compendium labels.
+
+        variance_threshold (int): What percentile of low variance genes to remove.
+        minimum_expression (float): The threshold for minimum expression. Units: mean log2(TPM+1)
     """
-    filtered_datasets = []
+    exp_df = pd.concat(expression_dict.values())
 
-    for compendium, expression_df in expression_dict.items():
-        # Convert to Scanpy AnnData format
-        adata = sc.AnnData(expression_df.T)  # Transpose: Genes → Variables, Samples → Observations
+    # Separate non-numeric columns
+    non_numeric_columns = exp_df.select_dtypes(exclude=[np.number]).columns
+    non_numeric_data = exp_df[non_numeric_columns]
 
-        # Remove genes with very low expression (mean log2(TPM+1) < 1)
-        min_expression = 1  # Threshold for minimum expression
-        gene_means = adata.X.mean(axis=0)  # Mean expression per gene
-        genes_to_keep = gene_means > min_expression
-        adata = adata[:, genes_to_keep]  # Keep only genes that pass the threshold
+    # Process numeric columns (genes) only
+    numeric_columns = exp_df.select_dtypes(include=[np.number])
 
-        # Calculate variance for each gene
-        gene_variances = adata.X.var(axis=0)
+    # Remove genes with very low expression
+    gene_means = numeric_columns.mean()
+    genes_to_keep = gene_means > minimum_expression
+    filtered_numeric_columns = numeric_columns.loc[:, genes_to_keep]
 
-        # Determine the threshold for the top 80% most variable genes
-        threshold = np.percentile(gene_variances, LOWEST_VARIANCE_PERCENTILE)
+    # Remove genes with the lowest variance
+    gene_variances = filtered_numeric_columns.var()
+    genes_to_keep = gene_variances > np.percentile(gene_variances, variance_threshold)
+    filtered_numeric_columns = filtered_numeric_columns.loc[:, genes_to_keep]
 
-        # Select genes with variance above the threshold
-        genes_to_keep = gene_variances > threshold
-        adata = adata[:, genes_to_keep]  # Keep only the most variable genes
-
-        # Convert back to Pandas DataFrame
-        filtered_expression_df = pd.DataFrame(adata.X.T, index=adata.var_names, columns=adata.obs_names)
-        filtered_expression_df["compendium"] = compendium  # Add a compendium column
-
-        # Store filtered dataset
-        filtered_datasets.append(filtered_expression_df)
-
-    # Merge all processed datasets into a single DataFrame
-    compendia_df = pd.concat(filtered_datasets, axis=0)  # Merge all gene expression data
-
-    return compendia_df
+    filtered_exp_df = pd.concat([non_numeric_data, filtered_numeric_columns], axis=1)
+    return filtered_exp_df
 
 
 def process_clinical_compendium(clinical_dict):
