@@ -43,42 +43,25 @@ def expression_dict():
 
     return expression_dict
 
+def test_format_process_expression_compendium(expression_dict):
     """
     Test the process_expression_compendium function to ensure it concatenates two compendia into one returns a
     DataFrame with the expected format.
     """
 
-    patients1 = ["Patient_A", "Patient_B", "Patient_C"]
-    patients2 = ["Patient_D", "Patient_E", "Patient_F"]
-    # Create a DataFrame with patient identifying strings as IDs
-    expression_dict = {
-        "compendium1": pd.DataFrame({
-            "SampleID": patients1,
-            "gene_1": [5.2, 4.8, 5.0],
-            "gene_2": [3.1, 2.9, 3.0],
-            "gene_3": [7.4, 6.8, 7.0],
-            # Add more genes as needed
-        }),
-        "compendium2": pd.DataFrame({
-            "SampleID": patients2,
-            "gene_1": [5.1, 4.9, 5.0],
-            "gene_2": [3.2, 2.8, 3.1],
-            "gene_3": [7.2, 6.9, 7.1],
-            # Add more genes as needed
-        })
-    }
-
     # Call the function to test
     processed_compendium = process_expression_compendium(expression_dict)
 
-    # The processed compendium should have one column "SampleID", one column "compendium" and 3 gene columns.
-    # There should be 6 rows in total.
-    assert processed_compendium.shape == (6, 5)
-    assert "SampleID" in processed_compendium.columns
-    assert "gene_1" in processed_compendium.columns
-    assert "gene_2" in processed_compendium.columns
-    assert "gene_3" in processed_compendium.columns
-    assert list(processed_compendium["SampleID"]) == patients1 + patients2
+    # The processed compendium should have one column "compendium" and 10 gene columns. Index column doesn't get counted.
+    # 6 samples so should have 6 rows
+    assert processed_compendium.shape == (6, 11)
+
+    # Check that the indexes are the same as the patient IDs
+    patients = ["Patient_A", "Patient_B", "Patient_C", "Patient_D", "Patient_E", "Patient_F"]
+    assert all(patient in processed_compendium.index for patient in patients)
+    assert "compendium" in processed_compendium.columns
+    for i in range(1, 11):
+        assert f"gene_{i}" in processed_compendium.columns
 
 def test_min_exp_process_expression_compendium():
     """
@@ -117,3 +100,9 @@ def test_min_exp_process_expression_compendium():
     # Processed compendium should not contain gene_4 or gene_1 columns
     assert "gene_1" not in processed_compendium.columns
     assert "gene_4" not in processed_compendium.columns
+
+def test_min_var_process_expression_compendium():
+    """
+    Test the variance_threshold argument of the process_expression_compendium function to ensure it filters out genes
+    with variance below the threshold.
+    """
