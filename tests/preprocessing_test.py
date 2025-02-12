@@ -1,7 +1,48 @@
 import pandas as pd
 from src.preprocessing import process_expression_compendium
+import pytest
 
-def test_format_process_expression_compendium():
+@pytest.fixture
+def expression_dict():
+    patients1 = ["Patient_A", "Patient_B", "Patient_C"]
+    patients2 = ["Patient_D", "Patient_E", "Patient_F"]
+
+    data1 = {
+        "gene_1": [5.2, 4.8, 5.0],
+        "gene_2": [3.1, 2.9, 3.0],
+        "gene_3": [7.4, 6.8, 7.0],
+        "gene_4": [1.0, 1.1, 1.2],
+        "gene_5": [2.0, 2.1, 2.2],
+        "gene_6": [3.0, 3.1, 3.2],
+        "gene_7": [4.0, 4.1, 4.2],
+        "gene_8": [5.0, 5.1, 5.2],
+        "gene_9": [6.0, 6.1, 6.2],
+        "gene_10": [7.0, 7.1, 7.2]
+    }
+
+    data2 = {
+        "gene_1": [5.1, 4.9, 5.0],
+        "gene_2": [3.2, 2.8, 3.1],
+        "gene_3": [7.2, 6.9, 7.1],
+        "gene_4": [1.1, 1.0, 1.2],
+        "gene_5": [2.1, 2.0, 2.2],
+        "gene_6": [3.1, 3.0, 3.2],
+        "gene_7": [4.1, 4.0, 4.2],
+        "gene_8": [5.1, 5.0, 5.2],
+        "gene_9": [6.1, 6.0, 6.2],
+        "gene_10": [7.1, 7.0, 7.2]
+    }
+
+    df1 = pd.DataFrame(data1, index=patients1)
+    df2 = pd.DataFrame(data2, index=patients2)
+
+    expression_dict = {
+        "compendium1": df1,
+        "compendium2": df2
+    }
+
+    return expression_dict
+
     """
     Test the process_expression_compendium function to ensure it concatenates two compendia into one returns a
     DataFrame with the expected format.
