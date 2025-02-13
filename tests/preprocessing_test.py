@@ -1,5 +1,5 @@
 import pandas as pd
-from src.preprocessing import process_expression_compendium
+from src.preprocessing import process_expression_compendium, process_clinical_compendium
 import pytest
 
 @pytest.fixture
@@ -42,6 +42,46 @@ def expression_dict():
     }
 
     return expression_dict
+
+@pytest.fixture
+def clinical_dict():
+    """
+    Create a dictionary of clinical dataframes for testing purposes. data1 and data2 represent two different compendia.
+    data2 has an additional identifier "aliquot_id" that data1 does not have.
+    """
+
+    data1 = {
+        "patient_id": ["TCGA-ZP-A9CV-01", "TCGA-ZP-A9CY-01", "TCGA-ZP-A9CZ-01"],
+        "disease": ["hepatocellular carcinoma", "hepatocellular carcinoma", "hepatocellular carcinoma"],
+        "age": [59, 66, 72],
+        "gender": ["male", "female", "male"],
+        "project": ["TCGA", "TCGA", "TCGA"],
+        "phs_id": ["phs000178", "phs000178", "phs000178"],
+        "sample_id": ["TCGA-ZP-A9CV", "TCGA-ZP-A9CY", "TCGA-ZP-A9CZ"],
+        "species": ["Homo sapiens", "Homo sapiens", "Homo sapiens"]
+    }
+
+    data2 = {
+        "patient_id": ["TCGA-ZP-A9D0-01", "TCGA-ZP-A9D1-01", "TCGA-ZP-A9D2-01"],
+        "disease": ["hepatocellular carcinoma", "hepatocellular carcinoma", "hepatocellular carcinoma"],
+        "age": [67, 56, 51],
+        "gender": ["female", "female", "male"],
+        "project": ["TCGA", "TCGA", "TCGA"],
+        "phs_id": ["phs000178", "phs000178", "phs000178"],
+        "sample_id": ["TCGA-ZP-A9D0", "TCGA-ZP-A9D1", "TCGA-ZP-A9D2"],
+        "aliquot_id": ["TCGA-ZP-A9D0-01", "TCGA-ZP-A9D1-01", "TCGA-ZP-A9D2-01"],
+        "species": ["Homo sapiens", "Homo sapiens", "Homo sapiens"]
+    }
+
+    df1 = pd.DataFrame(data1).set_index("patient_id")
+    df2 = pd.DataFrame(data2).set_index("patient_id")
+
+    clinical_dict = {
+        "compendium1": df1,
+        "compendium2": df2
+    }
+
+    return clinical_dict
 
 def verify_processed_compendium(processed_compendium):
     """
@@ -114,4 +154,31 @@ def test_min_var_process_expression_compendium(expression_dict):
         for gene in gene_variances.nlargest(10 - i).index:
             assert gene in processed_compendium.columns
 
+def test_process_clinical_compendium(clinical_dict):
+    """
+    Test the process_clinical_compendium function. Clinical datasets can have different columns so make sure that
+    the compendium dataframe has all columns from all datasets. Make sure that the patient ids are used to index. Also
+    check that the compendium column is present.
+    """
 
+    # Call the function to build the processed compendium
+    processed_compendium = process_clinical_compendium(clinical_dict)
+
+    # Collect all unique columns from the clinical_dict except 'patient_id' which is used as an index in the df
+    all_columns = set()
+    for df in clinical_dict.values():
+        all_columns.update(df.columns)
+    all_columns.discard("patient_id")
+
+    # Check that all columns are present in the processed compendium
+    for column in all_columns:
+        assert column in processed_compendium.columns
+
+    # Check that the indexes are the same as the patient IDs
+    patients = [
+        "TCGA-ZP-A9CV-01", "TCGA-ZP-A9CY-01", "TCGA-ZP-A9CZ-01",
+        "TCGA-ZP-A9D0-01", "TCGA-ZP-A9D1-01", "TCGA-ZP-A9D2-01"]
+    assert all(patient in processed_compendium.index for patient in patients)
+
+    # Check that the compendium column is present
+    assert "compendium" in processed_compendium.columns
