@@ -94,8 +94,24 @@ def test_min_exp_process_expression_compendium(expression_dict):
     # Make sure structure is still correct
     verify_processed_compendium(processed_compendium)
 
-def test_min_var_process_expression_compendium():
+def test_min_var_process_expression_compendium(expression_dict):
     """
-    Test the variance_threshold argument of the process_expression_compendium function to ensure it filters out genes
-    with variance below the threshold.
+    Test the variance_threshold argument of the process_expression_compendium function to ensure it filters out the
+    correct gene/s and number of genes from the processed compendium.
     """
+
+    # Calculate the variances for each gene
+    gene_variances = pd.concat(expression_dict.values()).var()
+
+    # Test the variance threshold from 10% to 100% in 10% increments.
+    for i in range(1, 11):
+        processed_compendium = process_expression_compendium(expression_dict, variance_threshold= (i * 10))
+        # Make sure that the lowest variance gene/s is removed. There are 10 genes so every 10% increase
+        # should remove 1 gene.
+        for gene in gene_variances.nsmallest(i).index:
+            assert gene not in processed_compendium.columns
+        # Make sure that the other genes are still present
+        for gene in gene_variances.nlargest(10 - i).index:
+            assert gene in processed_compendium.columns
+
+
