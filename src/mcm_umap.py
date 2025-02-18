@@ -76,7 +76,9 @@ class MCMUmap(BaseLayout):
         '''''
     # UMAP Utility Function for testing
     # TODO: Writ more tests with different neighbors and distance values
-    def draw_umap(data, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclidean', title=''):
+    def draw_umap(data, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclidean', 
+                  title='UMAP Visulation of Gene Expression Data'
+        ):
         fit = umap.UMAP(
             n_neighbors=n_neighbors,
             min_dist=min_dist,
