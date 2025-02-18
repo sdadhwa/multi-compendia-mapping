@@ -1,7 +1,12 @@
 import os
 import pandas as pd
 import numpy as np
+import sys
 from src.preprocessing import process_expression_compendium
+
+# Add the src directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
+
 
 # Define the path to the raw data directory
 RAW_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/raw")

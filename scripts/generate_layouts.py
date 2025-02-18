@@ -1,4 +1,7 @@
+import sys
+import os
 import pandas as pd
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
 from src.layout_algorithms import MCMUmap
 
 # TODO Import csv data for ALL compendiums
