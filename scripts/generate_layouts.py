@@ -71,4 +71,3 @@ def draw_umap(data, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclid
 # n_components values: 1, 2, 3
 # metric values: 'euclidean', 'correlation' --> most likely will use euclidean
 # but it would be cool to see what correlation looks like, maybe it fits our data better or not?
-# its something to write about in our report too
