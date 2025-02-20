@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 import logging
 from src.preprocessing import process_expression_compendium
-#Removed sys.path.append(...),
-#Configure logging (we can remove this its just for testing)
+
+# Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Define directories
@@ -13,7 +13,7 @@ PROCESSED_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "d
 
 def load_tsv_files(directory):
     """
-    Load all TSV files in the given directory into a dictionary of DataFrames.
+    Load all expression TSV files in the given directory into a dictionary of DataFrames.
 
     Args:
         directory (str): Path to the directory containing TSV files.
@@ -42,35 +42,60 @@ def load_tsv_files(directory):
 
     return expression_dict
 
-def merge_clinical_data(directory):
+def load_clinical_files(directory):
     """
-    Load and merge all clinical TSV files in the given directory into a single DataFrame.
+    Load all clinical TSV files in the given directory into a dictionary of DataFrames.
 
     Args:
         directory (str): Path to the directory containing clinical TSV files.
 
     Returns:
-        pd.DataFrame: Merged clinical data.
+        dict: Dictionary where keys are compendium names and values are DataFrames.
     """
-    clinical_files = [file for file in os.listdir(directory) if "clinical" in file and file.endswith(".tsv")]
-    
-    if not clinical_files:
-        raise FileNotFoundError("No clinical data files found in the directory.")
+    clinical_dict = {}
 
-    clinical_dfs = []
-    for file_name in clinical_files:
-        file_path = os.path.join(directory, file_name)
-        try:
-            df = pd.read_csv(file_path, sep="\t", index_col=0)
-            df["Source_File"] = file_name  # Add column to track origin
-            clinical_dfs.append(df)
-        except Exception as e:
-            logging.warning(f"Failed to load {file_name}: {e}")
+    if not os.path.exists(directory):
+        raise FileNotFoundError(f"Directory '{directory}' does not exist.")
 
-    merged_clinical = pd.concat(clinical_dfs, axis=0, ignore_index=False)
-    logging.info(f"Merged clinical data shape: {merged_clinical.shape}")
+    for file_name in os.listdir(directory):
+        if "clinical" in file_name and file_name.endswith(".tsv"):  # Only load clinical files
+            file_path = os.path.join(directory, file_name)
+            try:
+                df = pd.read_csv(file_path, sep="\t", index_col=0)
+                compendium_name = os.path.splitext(file_name)[0]  # Use filename as key
+                clinical_dict[compendium_name] = df
+                logging.info(f"Loaded {file_name} ({df.shape[0]} rows, {df.shape[1]} columns)")
+            except Exception as e:
+                logging.warning(f"Failed to load {file_name}: {e}")
 
-    return merged_clinical
+    if not clinical_dict:
+        logging.error("No clinical TSV files found in the directory.")
+        raise ValueError("No clinical data files were loaded. Please check your input directory.")
+
+    return clinical_dict
+
+def process_clinical_compendium(clinical_dict):
+    """
+    Process a dictionary of clinical dataframes and return a merged compendium dataframe.
+
+    Args:
+        clinical_dict (dict): Dictionary where keys are compendium names and values are DataFrames containing clinical data.
+
+    Returns:
+        pd.DataFrame: Merged clinical data with compendium labels.
+    """
+    clinical_datasets = []
+
+    for compendium, clinical_df in clinical_dict.items():
+        # Add compendium label to clinical data
+        clinical_df["Compendium"] = compendium
+        clinical_datasets.append(clinical_df)
+
+    # Merge all clinical datasets into a single DataFrame
+    compendia_df = pd.concat(clinical_datasets, axis=0, ignore_index=False)
+    logging.info(f"Merged clinical data shape: {compendia_df.shape}")
+
+    return compendia_df
 
 def main():
     logging.info("Starting data processing pipeline...")
@@ -82,18 +107,21 @@ def main():
     expression_dict = load_tsv_files(RAW_DATA_DIR)
     logging.info("Processing expression data...")
     processed_compendium = process_expression_compendium(expression_dict)
-    expression_output_path = os.path.join(PROCESSED_DATA_DIR, "processed_compendium.tsv")     #Processed Expression data
+    expression_output_path = os.path.join(PROCESSED_DATA_DIR, "processed_compendium.tsv")
     processed_compendium.to_csv(expression_output_path, sep="\t")
     logging.info(f"Processed expression data saved to {expression_output_path}")
 
-    # Merge and save clinical data
-    merged_clinical = merge_clinical_data(RAW_DATA_DIR)
-    clinical_output_path = os.path.join(PROCESSED_DATA_DIR, "processed_clinical_data.tsv")    #Processed Clinical dataa
-    merged_clinical.to_csv(clinical_output_path, sep="\t")
+    # Load, process, and merge clinical data
+    clinical_dict = load_clinical_files(RAW_DATA_DIR)
+    processed_clinical = process_clinical_compendium(clinical_dict)
+    clinical_output_path = os.path.join(PROCESSED_DATA_DIR, "processed_clinical_data.tsv")
+    processed_clinical.to_csv(clinical_output_path, sep="\t")
     logging.info(f"Merged clinical data saved to {clinical_output_path}")
 
 if __name__ == "__main__":
     main()
 
+
+#To-Do: need to install src to our working environment (setup.py)
 
 #To-Do: need to install src to our working environment (setup.py)
