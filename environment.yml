@@ -3,13 +3,6 @@ channels:
   - conda-forge
 dependencies:
   - python=3.12
-  - numpy
-  - pandas
-  - pytest
-  - scanpy
-  - seaborn
-  - umap-learn
-  - scikit-learn
-  - matplotlib
-  - ipython
-  - requests
+  - pip
+  - pip:
+    - -e .
