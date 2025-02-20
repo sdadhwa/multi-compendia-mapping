@@ -35,10 +35,10 @@ clinical_files = {
 }
 
 # Load in combined/merged and trimmed clinical and expression data
-expression_file = "filtered_gene_expression.tsv"
+expression_file = "processed_compendium.tsv"
 df_expr = pd.read_csv(expression_file, sep="\t", index_col=0)
 
-clinical_data_file = "filtered_clinical_data.tsv"
+clinical_data_file = "processed_clinical_data.tsv"
 df_clinical = pd.read_csv(clinical_data_file, sep="\t", index_col=0)
 
 compressed_df = MCMUmap().fit_transform(df_expr, df_clinical)
