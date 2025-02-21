@@ -5,8 +5,9 @@ import requests
 Script to download genomic data and outputs both clinical and expression data files as TSV.
 """
 
-# Define RAW_PATH to target the project-level data/raw directory
-RAW_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/raw")
+# Define RAW_PATH to target the project-level data/processed directory
+RAW_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/processed")
+
 
 def ensure_dirs():
     """Ensure the download directory exists."""
