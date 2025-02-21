@@ -4,8 +4,6 @@ import numpy as np
 import logging
 from src.preprocessing import process_expression_compendium
 
-# Testings
-
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
