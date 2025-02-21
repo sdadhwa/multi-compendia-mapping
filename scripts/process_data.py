@@ -1,14 +1,17 @@
 import os
+import sys 
 import pandas as pd
 import numpy as np
 import logging
-from src.preprocessing import process_expression_compendium
+
+#Manually added `src/` to Python's path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Define directories
-RAW_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/raw")
+RAW_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/processed")
 PROCESSED_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/processed")
 
 def load_tsv_files(directory):
