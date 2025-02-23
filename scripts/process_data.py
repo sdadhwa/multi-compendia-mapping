@@ -9,7 +9,7 @@ from src.preprocessing import process_expression_compendium
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Define directories
-RAW_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/processed")
+RAW_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/raw")
 PROCESSED_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/processed")
 
 def load_tsv_files(directory):
