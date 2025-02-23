@@ -5,10 +5,6 @@ import numpy as np
 import logging
 from src.preprocessing import process_expression_compendium
 
-
-#Manually added `src/` to Python's path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
-
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -125,6 +121,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-#To-Do: need to install src to our working environment (setup.py)
