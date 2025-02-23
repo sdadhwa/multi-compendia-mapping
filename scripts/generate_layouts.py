@@ -3,10 +3,6 @@ import os
 from matplotlib import pyplot as plt
 import pandas as pd
 import umap
-
-# Add the src directory to the Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
-
 from src.layout_algorithms import MCMUmap
 
 # TODO Import csv data for ALL compendiums
