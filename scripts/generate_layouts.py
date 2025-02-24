@@ -3,7 +3,7 @@ import os
 from matplotlib import pyplot as plt
 import pandas as pd
 import umap
-from src.layout_algorithms import MCMUmap
+from layout_algorithms.mcm_umap import MCMUmap
 
 # TODO Import csv data for ALL compendiums
 
