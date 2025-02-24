@@ -19,7 +19,7 @@ class MCMUmap(BaseLayout):
         '''
         
         # Map seaborn for plotting
-        sns(style="white", context='poster', rc={'figure.figsize': (14, 10)})
+        sns.set_theme(style="white", context='poster', rc={'figure.figsize': (14, 10)})
 
         # Use umap library and initiate class
         reducer = umap.UMAP()
