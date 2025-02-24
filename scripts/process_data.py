@@ -11,6 +11,8 @@ from src.preprocessing import process_clinical_compendium
 #Manually added `src/` to Python's path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
+from preprocessing import process_expression_compendium
+from preprocessing import process_clinical_compendium
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
