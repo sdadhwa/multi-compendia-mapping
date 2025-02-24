@@ -17,9 +17,7 @@ class MCMUmap(BaseLayout):
 
         This is the skeleton for UMAP integration.
         '''
-
-        get_ipython().run_line_magic('matplotlib', 'inline')
-
+        
         # Map seaborn for plotting
         sns(style="white", context='poster', rc={'figure.figsize': (14, 10)})
 
