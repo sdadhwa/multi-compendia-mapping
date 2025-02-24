@@ -54,7 +54,8 @@ def process_clinical_compendium(clinical_dict):
         clinical_dict (dict): Dictionary where keys are compendium names and values are dataframes containing clinical data.
 
     Returns:
-        pd.DataFrame: Compendia dataframe with clinical data and compendium labels.
+        pd.DataFrame: Compendia dataframe with clinical data and added 'compendium' column label that marks the
+        compendium of origin.
     """
     clinical_datasets = []
 
