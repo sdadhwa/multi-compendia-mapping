@@ -6,7 +6,7 @@ Script to download genomic data and outputs both clinical and expression data fi
 """
 
 # Define RAW_PATH to target the project-level data/processed directory
-RAW_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/processed")
+RAW_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/raw")
 
 
 def ensure_dirs():
