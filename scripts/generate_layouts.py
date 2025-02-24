@@ -60,6 +60,7 @@ def draw_umap(data, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclid
         ax = fig.add_subplot(111, projection='3d')
         ax.scatter(u[:,0], u[:,1], u[:,2], c=data, s=100)
     plt.title(title, fontsize=18)
+    plt.show()
 
 # UMAP visualization tests - replace numbers above with these numbers
 # n_neighbors values: 5, 15, 30
