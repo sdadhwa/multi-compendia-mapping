@@ -3,7 +3,7 @@ import sys
 import pandas as pd
 import numpy as np
 import logging
-from src.preprocessing import process_expression_compendium
+from preprocessing import process_expression_compendium
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
