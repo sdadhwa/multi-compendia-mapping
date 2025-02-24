@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import umap
-from src.layout_algorithms.base_layout import BaseLayout
+from .base_layout import BaseLayout
 from IPython import get_ipython
 
 
