@@ -4,6 +4,8 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import umap
 from layout_algorithms.mcm_umap import MCMUmap
+from data.processed import processed_clinical_data, processed_expression_data
+from preprocessing import process_expression_compendium, process_clinical_compendium
 
 # TODO Import csv data for ALL compendiums
 
@@ -12,39 +14,28 @@ Label data points based on compendium of origin for
 adding labels to data points for each compendium in the map
 '''
 
-# Expression data compendias by name
-expression_files = {
-    "Tumor_polyA": "data/Tumor_polyA_TPM.tsv",
-    "Tumor_rRNA": "data/Tumor_rRNA_TPM.tsv",
-    "CellLine_polyA": "data/CellLine_polyA_TPM.tsv",
-    "PDX_polyA": "data/PDX_polyA_TPM.tsv",
-    "PDX_rRNA": "data/PDX_rRNA_TPM.tsv",
-}
+# File paths for processed data
+expression_file = "data/processed/processed_expression_data.tsv"
+clinical_file = "data/processed/processed_clinical_data.tsv"
 
-# Clinical data compendias by name
-clinical_files = {
-    "Tumor_polyA": "data/Tumor_polyA_Clinical.tsv",
-    "Tumor_rRNA": "data/Tumor_rRNA_Clinical.tsv",
-    "CellLine_polyA": "data/CellLine_polyA_Clinical.tsv",
-    "PDX_polyA": "data/PDX_polyA_Clinical.tsv",
-    "PDX_rRNA": "data/PDX_rRNA_Clinical.tsv",
-}
-
-# Load in combined/merged and trimmed clinical and expression data
-expression_file = "data/processed/processed_compendium.tsv"
-print(f"Loading expression data from {expression_file}")
-df_expr = pd.read_csv(expression_file, sep="\t", index_col=0, low_memory=False)
+# Load expression data into DataFrame
+df_expr = pd.read_csv(expression_file, sep="\t", index_col=0)
 print(f"Expression data shape: {df_expr.shape}")
 
-clinical_data_file = "data/processed/processed_clinical_data.tsv"
-print(f"Loading clinical data from {clinical_data_file}")
-df_clinical = pd.read_csv(clinical_data_file, sep="\t", index_col=0, low_memory=False)
+# Load clinical data into DataFrame
+df_clinical = pd.read_csv(clinical_file, sep="\t", index_col=0)
 print(f"Clinical data shape: {df_clinical.shape}")
+
+# Check if the DataFrames are empty
+if df_expr.empty:
+    raise ValueError("Expression data is empty.")
+if df_clinical.empty:
+    raise ValueError("Clinical data is empty.")
 
 compressed_df = MCMUmap().fit_transform(df_expr, df_clinical)
 
 # UMAP Utility Function for testing
-# TODO: Writ more tests with different neighbors and distance values
+# TODO: Write more tests with different neighbors and distance values
 def draw_umap(data, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclidean', title=''):
     fit = umap.UMAP(
         n_neighbors=n_neighbors,
