@@ -32,10 +32,14 @@ clinical_files = {
 
 # Load in combined/merged and trimmed clinical and expression data
 expression_file = "data/processed/processed_compendium.tsv"
+print(f"Loading expression data from {expression_file}")
 df_expr = pd.read_csv(expression_file, sep="\t", index_col=0, low_memory=False)
+print(f"Expression data shape: {df_expr.shape}")
 
 clinical_data_file = "data/processed/processed_clinical_data.tsv"
+print(f"Loading clinical data from {clinical_data_file}")
 df_clinical = pd.read_csv(clinical_data_file, sep="\t", index_col=0, low_memory=False)
+print(f"Clinical data shape: {df_clinical.shape}")
 
 compressed_df = MCMUmap().fit_transform(df_expr, df_clinical)
 

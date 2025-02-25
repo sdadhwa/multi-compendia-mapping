@@ -7,7 +7,7 @@ import pandas as pd
 import umap
 from .base_layout import BaseLayout
 from IPython import get_ipython
-
+from preprocessing import process_expression_compendium, process_clinical_compendium
 
 class MCMUmap(BaseLayout):
 
@@ -27,41 +27,16 @@ class MCMUmap(BaseLayout):
         # Ensure correct data merging
         merged_data = pd.merge(expression_df, clinical_df, left_index=True, right_index=True)
 
-        # Define metada columns
-        # TODO: adjust colums (add? remove?)
-        metadata_columns = [
-            "Compendium",
-            "SampleType",
-            "TumorType"
-        ]
-
-        # Extract numerical gene expression values
-        expression_data = expression_df.drop(columns=metadata_columns)  # Gene expression only
-        metadata = clinical_df[metadata_columns]  # Store metadata separately
-
         # Drop missing values if needed
-        expression_data = expression_data.dropna()
+        merged_data = merged_data.dropna()
 
         # Standardize expression data
         scaler = StandardScaler()
-        expression_scaled = scaler.fit_transform(expression_data)
+        expression_scaled = scaler.fit_transform(merged_data)
 
         # Perform UMAP dimensionality reduction
         reducer = umap.UMAP(n_components=2, n_neighbors=15, min_dist=0.1, metric="correlation", random_state=42)
         embedding = reducer.fit_transform(expression_scaled)
-
-        # Create a DataFrame for the UMAP results
-        df_umap = pd.DataFrame(embedding, columns=["UMAP1", "UMAP2"], index=expression_data.index)
-        df_umap["Compendium"] = metadata["Compendium"]  # Add compendium labels
-        df_umap["SampleType"] = metadata["SampleType"]  # Add sample type labels
-        df_umap["TumorType"] = metadata["TumorType"]  # Add tumor type labels
-
-        # Plot UMAP results
-        plt.figure(figsize=(10, 6))
-        sns.scatterplot(x="UMAP1", y="UMAP2", hue="Compendium", data=df_umap, palette="tab10")
-        plt.title("UMAP Projection of Filtered RNA-seq Data")
-        plt.legend(bbox_to_anchor=(1, 1))
-        plt.show()
 
         # TODO: modify n_neighbors and min_dist to see how it affects the map
         # and how it affects the clustering of samples
