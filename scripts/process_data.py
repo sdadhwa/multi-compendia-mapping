@@ -3,13 +3,9 @@ import sys
 import pandas as pd
 import numpy as np
 import logging
-from src.preprocessing import process_expression_compendium
-from src.preprocessing import process_clinical_compendium 
+from preprocessing import process_expression_compendium
+from preprocessing import process_clinical_compendium 
 
-
-
-#Manually added `src/` to Python's path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
