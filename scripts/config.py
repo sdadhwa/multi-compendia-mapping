@@ -130,7 +130,7 @@ class PDXPolyA(ScriptConfig):
     no compendium merging.
     """
 
-    data_dir = 'data/pdx_polya'
+    data_dir = os.path.join('data', 'pdx_polya')
     expression_targets = {
         "PDX_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
     }
