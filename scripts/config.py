@@ -137,3 +137,29 @@ class CLPolyA(ScriptConfig):
     clinical_targets = {
         "cell_line_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_CellLinePolyA_21.06_for_GEO_20240520.tsv",
     }
+
+# Define a constant list of valid configurations
+VALID_CONFIGS = ["production", "clpolya"]
+
+def get_config(config_name):
+    """
+    Returns the appropriate configuration class based on the provided command line argument.
+
+    Args:
+        config_name (str): The name of the configuration to use. Available options are:
+            - "production": Use the ProductionConfig class.
+            - "clpolya": Use the CLPolyA class.
+
+    Returns:
+        ScriptConfig: The configuration class corresponding to the provided name, or None if an invalid configuration name is provided.
+
+    Prints:
+        str: An error message if an invalid configuration name is provided.
+    """
+    if config_name == "production":
+        return ProductionConfig
+    elif config_name == "clpolya":
+        return CLPolyA
+    else:
+        print(f"Invalid configuration name: {config_name}. Valid configurations are: {', '.join(VALID_CONFIGS)}")
+        return None
