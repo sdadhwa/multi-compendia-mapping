@@ -1,30 +1,27 @@
 import os
 import requests
+from paths import RAW_DATA_DIR
 
 """
 Script to download genomic data and outputs both clinical and expression data files as TSV.
 """
 
-# Define RAW_PATH to target the project-level data/processed directory
-RAW_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/raw")
-
-
 def ensure_dirs():
     """Ensure the download directory exists."""
-    os.makedirs(RAW_PATH, exist_ok=True)
+    os.makedirs(RAW_DATA_DIR, exist_ok=True)
 
 def download_file(url: str, filename: str):
     """
-    Downloads a file from the given URL and saves it in the RAW_PATH directory.
+    Downloads a file from the given URL and saves it in the RAW_DATA_DIR directory.
 
     Parameters:
     url (str): The file URL.
     filename (str): The filename to save as.
     """
-    file_path = os.path.join(RAW_PATH, filename)
-    
+    file_path = os.path.join(RAW_DATA_DIR, filename)
+
     try:
-        #Bypass SSL verification
+        # Bypass SSL verification
         response = requests.get(url, stream=True, verify=False)
         response.raise_for_status()
 
@@ -32,7 +29,7 @@ def download_file(url: str, filename: str):
             for chunk in response.iter_content(chunk_size=8192):
                 file.write(chunk)
 
-        print(f" Downloaded: {file_path}")
+        print(f"Downloaded: {file_path}")
 
     except requests.exceptions.RequestException as e:
         print(f"Failed to download {filename}: {e}")
@@ -45,7 +42,7 @@ def download_files(file_dict):
     file_dict (dict): Dictionary where keys are filenames and values are URLs.
     """
     for filename, url in file_dict.items():
-        print(f" Downloading {filename} from {url}...")
+        print(f"Downloading {filename} from {url}...")
         download_file(url, filename)
 
 if __name__ == "__main__":
@@ -74,6 +71,5 @@ if __name__ == "__main__":
         "PDX_ribo_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-Ribodeplete_for_GEO_20240520.tsv",
     }
 
-    print(f"Files will be saved in: {RAW_PATH}\n")
+    print(f"Files will be saved in: {RAW_DATA_DIR}\n")
     download_files(files_to_download)
-    # TODO: Use requests library to download data here.
