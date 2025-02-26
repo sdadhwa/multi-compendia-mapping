@@ -4,8 +4,8 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import umap
 from layout_algorithms.mcm_umap import MCMUmap
-from data.processed import processed_clinical_data, processed_expression_data
 from preprocessing import process_expression_compendium, process_clinical_compendium
+from process_data import clinical_dict, expression_dict
 
 # TODO Import csv data for ALL compendiums
 
@@ -14,9 +14,9 @@ Label data points based on compendium of origin for
 adding labels to data points for each compendium in the map
 '''
 
-# File paths for processed data
-expression_file = "data/processed/processed_expression_data.tsv"
-clinical_file = "data/processed/processed_clinical_data.tsv"
+# All tsv files for expression and clinical data
+expression_file = expression_dict["expression_tsv"]
+clinical_file = clinical_dict["clinical_tsv"]
 
 # Load expression data into DataFrame
 df_expr = pd.read_csv(expression_file, sep="\t", index_col=0)
@@ -25,12 +25,6 @@ print(f"Expression data shape: {df_expr.shape}")
 # Load clinical data into DataFrame
 df_clinical = pd.read_csv(clinical_file, sep="\t", index_col=0)
 print(f"Clinical data shape: {df_clinical.shape}")
-
-# Check if the DataFrames are empty
-if df_expr.empty:
-    raise ValueError("Expression data is empty.")
-if df_clinical.empty:
-    raise ValueError("Clinical data is empty.")
 
 compressed_df = MCMUmap().fit_transform(df_expr, df_clinical)
 
