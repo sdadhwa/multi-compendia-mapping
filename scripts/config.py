@@ -74,7 +74,7 @@ class ScriptConfig:
         Returns:
             dict: A dictionary where keys are expression file paths and values are URLs.
         """
-        return {os.path.join(cls.raw_data_dir, file): url for file, url in cls.expression_targets.items()}
+        return {os.path.join(cls.raw_data_dir_path(), file): url for file, url in cls.expression_targets.items()}
 
     @classmethod
     def get_path_clinical_url_targets(cls):
@@ -84,7 +84,7 @@ class ScriptConfig:
         Returns:
             dict: A dictionary where keys are clinical file paths and values are URLs.
         """
-        return {os.path.join(cls.raw_data_dir, file): url for file, url in cls.clinical_targets.items()}
+        return {os.path.join(cls.raw_data_dir_path(), file): url for file, url in cls.clinical_targets.items()}
 
     @classmethod
     def get_expression_file_paths(cls):
@@ -124,7 +124,7 @@ class ProductionConfig(ScriptConfig):
         "PDX_ribo_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-Ribodeplete_for_GEO_20240520.tsv"
     }
 
-class PDX_PolyA(ScriptConfig):
+class PDXPolyA(ScriptConfig):
     """
     Configuration for only PDX\_polyA data. This is useful for testing and development for a single compendium and
     no compendium merging.
@@ -159,7 +159,7 @@ def get_config(config_name):
     if config_name == "production":
         return ProductionConfig
     elif config_name == "pdx_polya":
-        return PDX_PolyA
+        return PDXPolyA
     else:
         print(f"Invalid configuration name: {config_name}. Valid configurations are: {', '.join(VALID_CONFIGS)}")
         return None
