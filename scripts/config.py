@@ -22,7 +22,7 @@ class ScriptConfig:
             Example: {"file_clinical.tsv": "https://example.com/file_clinical.tsv"}
     """
 
-    project_root = '..'
+    project_root = '.'
     data_dir = 'data'
     raw_data_dir = 'raw'
     processed_dir = 'processed'
