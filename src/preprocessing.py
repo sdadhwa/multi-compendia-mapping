@@ -4,7 +4,14 @@ import numpy as np
 def process_expression_compendium(expression_dict, variance_threshold=None, minimum_expression=None):
     """
     Build a single data frame out of multiple gene expression data frames. If specified, remove genes with low variance
-    and/or low expression. When trying to do both, minimum_expression is applied first and then variance_threshold.
+    and/or low expression. When trying to do both, minimum_expression is applied first and then variance_threshold. Some
+    dataframes may have different genes, in which case the union of all genes is taken and missing values are filled
+    with 0.
+
+    Ex. If only one sample has expression data for gene A, all the other samples will have 0 expression values for gene
+    A set, even if those samples did not collect data for gene A. This will reduce the variance and mean expression
+    overall for gene A, which means it is more likely to be filtered out. This behavior is desirable because it ensures
+    that genes that have expression data across more samples are prioritized in being kept when applying filters.
 
     Args:
         expression_dict (dict): Dictionary where keys are compendium names and values are numpy dataframes containing
@@ -25,6 +32,10 @@ def process_expression_compendium(expression_dict, variance_threshold=None, mini
 
     # Concatenate all dataframes into a single dataframe
     exp_df = pd.concat(expression_dict.values())
+
+    # Replace any NaN values with 0. This is necessary because some dataframes may have different genes.
+    # Replacing with 0 will factor into calculating variance and mean expression for filtering.
+    exp_df = exp_df.fillna(0)
 
     # Remove genes with very low expression
     if minimum_expression is not None:
