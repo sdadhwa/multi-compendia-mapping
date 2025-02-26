@@ -22,114 +22,118 @@ class ScriptConfig:
             Example: {"file_clinical.tsv": "https://example.com/file_clinical.tsv"}
     """
 
-    def __init__(self):
-        self.project_root = '..'
-        self.data_dir = 'data'
-        self.raw_data_dir = 'raw'
-        self.processed_dir = 'processed'
-        self.expression_file = 'processed_compendium.tsv'
-        self.clinical_file = 'processed_clinical_data.tsv'
-        self.expression_targets = {}
-        self.clinical_targets = {}
+    project_root = '..'
+    data_dir = 'data'
+    raw_data_dir = 'raw'
+    processed_dir = 'processed'
+    expression_file = 'processed_compendium.tsv'
+    clinical_file = 'processed_clinical_data.tsv'
+    expression_targets = {}
+    clinical_targets = {}
 
-    def data_dir_path(self):
+    @classmethod
+    def data_dir_path(cls):
         """
         Get the full path to the data directory.
         """
-        return os.path.join(self.project_root, self.data_dir)
+        return os.path.join(cls.project_root, cls.data_dir)
 
-    def raw_data_dir_path(self):
+    @classmethod
+    def raw_data_dir_path(cls):
         """
         Get the path to the raw data directory relative to the project root directory.
         """
-        return os.path.join(self.data_dir_path(), self.raw_data_dir)
+        return os.path.join(cls.data_dir_path(), cls.raw_data_dir)
 
-    def processed_dir_path(self):
+    @classmethod
+    def processed_dir_path(cls):
         """
         Get the path to the processed data directory relative to the project root directory.
         """
-        return os.path.join(self.data_dir_path(), self.processed_dir)
+        return os.path.join(cls.data_dir_path(), cls.processed_dir)
 
-    def expression_file_path(self):
+    @classmethod
+    def expression_file_path(cls):
         """
         Get the path to the expression data file relative to the project root directory.
         """
-        return os.path.join(self.processed_dir_path(), self.expression_file)
+        return os.path.join(cls.processed_dir_path(), cls.expression_file)
 
-    def clinical_file_path(self):
+    @classmethod
+    def clinical_file_path(cls):
         """
         Get the path to the expression data file relative to the project root directory.
         """
-        return os.path.join(self.processed_dir_path(), self.clinical_file)
+        return os.path.join(cls.processed_dir_path(), cls.clinical_file)
 
-    def get_path_expression_url_targets(self):
+    @classmethod
+    def get_path_expression_url_targets(cls):
         """
         Get a dictionary of file paths to URLs for downloading expression files.
 
         Returns:
             dict: A dictionary where keys are expression file paths and values are URLs.
         """
-        return {os.path.join(self.raw_data_dir, file): url for file, url in self.expression_targets.items()}
+        return {os.path.join(cls.raw_data_dir, file): url for file, url in cls.expression_targets.items()}
 
-    def get_path_clinical_url_targets(self):
+    @classmethod
+    def get_path_clinical_url_targets(cls):
         """
         Get a dictionary of file paths to URLs for downloading clinical files.
 
         Returns:
             dict: A dictionary where keys are clinical file paths and values are URLs.
         """
-        return {os.path.join(self.raw_data_dir, file): url for file, url in self.clinical_targets.items()}
+        return {os.path.join(cls.raw_data_dir, file): url for file, url in cls.clinical_targets.items()}
 
-    def get_expression_file_paths(self):
+    @classmethod
+    def get_expression_file_paths(cls):
         """
         Get a list of expression file paths.
 
         Returns:
             list: A list of expression file paths.
         """
-        return [os.path.join(self.raw_data_dir, file) for file in self.expression_targets]
+        return [os.path.join(cls.raw_data_dir, file) for file in cls.expression_targets]
 
-    def get_clinical_file_paths(self):
+    @classmethod
+    def get_clinical_file_paths(cls):
         """
         Get a list of clinical file paths.
 
         Returns:
             list: A list of clinical file paths.
         """
-        return [os.path.join(self.raw_data_dir, file) for file in self.clinical_targets]
+        return [os.path.join(cls.raw_data_dir, file) for file in cls.clinical_targets]
 
 class ProductionConfig(ScriptConfig):
 
-    def __init__(self):
-        super().__init__()
-        self.expression_targets = {
-            "tumor_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/TumorCompendium_v11_PolyA_hugo_log2tpm_58581genes_2020-04-09.tsv",
-            "tumor_ribo_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/TreehousePEDv9_Ribodeplete_unique_hugo_log2_tpm_plus_1.2019-03-25.tsv",
-            "cell_line_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/CellLinePolyA_21.06_hugo_log2tpm_58581genes_2021-06-15.tsv",
-            "PDX_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
-            "PDX_ribo_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-Ribodeplete_for_GEO_20240520.tsv"
-        }
+    expression_targets = {
+        "tumor_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/TumorCompendium_v11_PolyA_hugo_log2tpm_58581genes_2020-04-09.tsv",
+        "tumor_ribo_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/TreehousePEDv9_Ribodeplete_unique_hugo_log2_tpm_plus_1.2019-03-25.tsv",
+        "cell_line_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/CellLinePolyA_21.06_hugo_log2tpm_58581genes_2021-06-15.tsv",
+        "PDX_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
+        "PDX_ribo_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-Ribodeplete_for_GEO_20240520.tsv"
+    }
 
-        self.clinical_targets = {
-            "tumor_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_TumorCompendium_v11_PolyA_for_GEO_20240520.tsv",
-            "tumor_ribo_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/Treehouse-PDX-Compendium-22.03-PolyA_hugo_log2tpm_58581genes_2022-03-09.tsv",
-            "cell_line_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_CellLinePolyA_21.06_for_GEO_20240520.tsv",
-            "PDX_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
-            "PDX_ribo_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-Ribodeplete_for_GEO_20240520.tsv"
-        }
+    clinical_targets = {
+        "tumor_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_TumorCompendium_v11_PolyA_for_GEO_20240520.tsv",
+        "tumor_ribo_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/Treehouse-PDX-Compendium-22.03-PolyA_hugo_log2tpm_58581genes_2022-03-09.tsv",
+        "cell_line_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_CellLinePolyA_21.06_for_GEO_20240520.tsv",
+        "PDX_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
+        "PDX_ribo_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-Ribodeplete_for_GEO_20240520.tsv"
+    }
 
 class CLPolyA(ScriptConfig):
     """
-    Configuration for only cell_line_polyA data. This is useful for testing and development for a single compendium and
+    Configuration for only cell\_line\_polyA data. This is useful for testing and development for a single compendium and
     no compendium merging.
     """
 
-    def __init__(self):
-        super().__init__()
-        self.expression_targets = {
-            "cell_line_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/CellLinePolyA_21.06_hugo_log2tpm_58581genes_2021-06-15.tsv",
-        }
+    expression_targets = {
+        "cell_line_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/CellLinePolyA_21.06_hugo_log2tpm_58581genes_2021-06-15.tsv",
+    }
 
-        self.clinical_targets = {
-            "cell_line_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_CellLinePolyA_21.06_for_GEO_20240520.tsv",
-       }
+    clinical_targets = {
+        "cell_line_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_CellLinePolyA_21.06_for_GEO_20240520.tsv",
+    }
