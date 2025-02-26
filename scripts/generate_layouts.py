@@ -7,7 +7,13 @@ from layout_algorithms.mcm_umap import MCMUmap
 from preprocessing import process_expression_compendium, process_clinical_compendium
 from process_data import clinical_dict, expression_dict
 
-# TODO Import csv data for ALL compendiums
+# TODO:
+# Need to import correct processed tsv files but I don't know what the name of that file is nor
+# how to reference it or where it is located. 
+# Then I need help with what the name of the dataframes are and how to reference them, there are so many files...
+# Things we need for the UMAP: processed tsv files (in a directory?) and the dataframes for naming the comepndiums
+
+# After we load those correctly then it should produce a visualization
 
 '''
 Label data points based on compendium of origin for
