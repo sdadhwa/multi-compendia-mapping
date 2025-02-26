@@ -11,7 +11,7 @@ from preprocessing import process_expression_compendium, process_clinical_compen
 
 class MCMUmap(BaseLayout):
 
-    def fit_transform(self, expression_df, clinical_df):
+    def fit_transform(self, expression_df):
         '''
         UMAP setup
 
@@ -25,7 +25,7 @@ class MCMUmap(BaseLayout):
         reducer = umap.UMAP()
 
         # Ensure correct data merging
-        merged_data = pd.merge(expression_df, clinical_df, left_index=True, right_index=True)
+        merged_data = pd.merge(expression_df, left_index=True, right_index=True)
 
         # Drop missing values if needed
         merged_data = merged_data.dropna()

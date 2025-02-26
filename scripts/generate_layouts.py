@@ -19,7 +19,7 @@ print(f"Expression data shape: {df_expr.shape}")
 df_clinical = pd.read_csv(CLINICAL_FILE, sep="\t", index_col=0, low_memory=False)
 print(f"Clinical data shape: {df_clinical.shape}")
 
-compressed_df = MCMUmap().fit_transform(df_expr, df_clinical)
+compressed_df = MCMUmap().fit_transform(df_expr)
 
 # UMAP Utility Function for testing
 # TODO: Write more tests with different neighbors and distance values
