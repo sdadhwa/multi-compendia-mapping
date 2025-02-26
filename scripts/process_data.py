@@ -2,8 +2,8 @@ import os
 import pandas as pd
 import numpy as np
 import logging
-from preprocessing import process_expression_compendium
-from preprocessing import process_clinical_compendium
+from src.preprocessing import process_expression_compendium
+from src.preprocessing import process_clinical_compendium
 from paths import RAW_DATA_DIR, PROCESSED_DIR, EXPRESSION_FILE, CLINICAL_FILE
 
 # Configure logging

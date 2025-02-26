@@ -47,6 +47,7 @@ def download_files(file_dict):
         download_file(url, file_path)
 
 if __name__ == "__main__":
+  #feature/script-config
     parser = argparse.ArgumentParser(description="Download genomic data files.")
     # Create an argument for the configuration name
     parser.add_argument(
@@ -56,7 +57,7 @@ if __name__ == "__main__":
         help=f"Configuration name (e.g., {', '.join(VALID_CONFIGS)})"
     )
     args = parser.parse_args()
-
+    
     # Get the configuration class based on the configuration name
     config = get_config(args.config)
     if config is None:

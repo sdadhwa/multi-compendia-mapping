@@ -4,32 +4,19 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import umap
 from layout_algorithms.mcm_umap import MCMUmap
-from preprocessing import process_expression_compendium, process_clinical_compendium
-from process_data import clinical_dict, expression_dict
-
-# TODO:
-# Need to import correct processed tsv files but I don't know what the name of that file is nor
-# how to reference it or where it is located. 
-# Then I need help with what the name of the dataframes are and how to reference them, there are so many files...
-# Things we need for the UMAP: processed tsv files (in a directory?) and the dataframes for naming the comepndiums
-
-# After we load those correctly then it should produce a visualization
+from paths import EXPRESSION_FILE, CLINICAL_FILE
 
 '''
 Label data points based on compendium of origin for
 adding labels to data points for each compendium in the map
 '''
 
-# All tsv files for expression and clinical data
-expression_file = expression_dict["expression_tsv"]
-clinical_file = clinical_dict["clinical_tsv"]
-
 # Load expression data into DataFrame
-df_expr = pd.read_csv(expression_file, sep="\t", index_col=0)
+df_expr = pd.read_csv(EXPRESSION_FILE, sep="\t", index_col=0, low_memory=False)
 print(f"Expression data shape: {df_expr.shape}")
 
 # Load clinical data into DataFrame
-df_clinical = pd.read_csv(clinical_file, sep="\t", index_col=0)
+df_clinical = pd.read_csv(CLINICAL_FILE, sep="\t", index_col=0, low_memory=False)
 print(f"Clinical data shape: {df_clinical.shape}")
 
 compressed_df = MCMUmap().fit_transform(df_expr, df_clinical)
