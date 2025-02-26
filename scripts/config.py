@@ -22,7 +22,8 @@ class ScriptConfig:
             Example: {"file_clinical.tsv": "https://example.com/file_clinical.tsv"}
     """
 
-    project_root = '.'
+    # Get the current file and move up one directory to the project directory
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     data_dir = 'data'
     raw_data_dir = 'raw'
     processed_dir = 'processed'
@@ -132,11 +133,11 @@ class PDXPolyA(ScriptConfig):
 
     data_dir = os.path.join('data', 'pdx_polya')
     expression_targets = {
-        "PDX_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
+        "TEST_PDX_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
     }
 
     clinical_targets = {
-        "PDX_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
+        "TEST_PDX_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
     }
 
 VALID_CONFIGS = ["production", "pdx_polya"]
