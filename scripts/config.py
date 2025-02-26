@@ -117,3 +117,19 @@ class ProductionConfig(ScriptConfig):
             "PDX_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
             "PDX_ribo_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-Ribodeplete_for_GEO_20240520.tsv"
         }
+
+class CLPolyA(ScriptConfig):
+    """
+    Configuration for only cell_line_polyA data. This is useful for testing and development for a single compendium and
+    no compendium merging.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.expression_targets = {
+            "cell_line_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/CellLinePolyA_21.06_hugo_log2tpm_58581genes_2021-06-15.tsv",
+        }
+
+        self.clinical_targets = {
+            "cell_line_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_CellLinePolyA_21.06_for_GEO_20240520.tsv",
+       }
