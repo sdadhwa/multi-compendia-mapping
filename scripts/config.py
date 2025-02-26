@@ -124,22 +124,22 @@ class ProductionConfig(ScriptConfig):
         "PDX_ribo_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-Ribodeplete_for_GEO_20240520.tsv"
     }
 
-class CLPolyA(ScriptConfig):
+class PDX_PolyA(ScriptConfig):
     """
-    Configuration for only cell\_line\_polyA data. This is useful for testing and development for a single compendium and
+    Configuration for only PDX\_polyA data. This is useful for testing and development for a single compendium and
     no compendium merging.
     """
 
+    data_dir = 'data/pdx_polya'
     expression_targets = {
-        "cell_line_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/CellLinePolyA_21.06_hugo_log2tpm_58581genes_2021-06-15.tsv",
+        "PDX_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
     }
 
     clinical_targets = {
-        "cell_line_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_CellLinePolyA_21.06_for_GEO_20240520.tsv",
+        "PDX_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
     }
 
-# Define a constant list of valid configurations
-VALID_CONFIGS = ["production", "clpolya"]
+VALID_CONFIGS = ["production", "pdx_polya"]
 
 def get_config(config_name):
     """
@@ -148,7 +148,7 @@ def get_config(config_name):
     Args:
         config_name (str): The name of the configuration to use. Available options are:
             - "production": Use the ProductionConfig class.
-            - "clpolya": Use the CLPolyA class.
+            - "pdx_polya": Use the PDX_PolyA class.
 
     Returns:
         ScriptConfig: The configuration class corresponding to the provided name, or None if an invalid configuration name is provided.
@@ -158,8 +158,8 @@ def get_config(config_name):
     """
     if config_name == "production":
         return ProductionConfig
-    elif config_name == "clpolya":
-        return CLPolyA
+    elif config_name == "pdx_polya":
+        return PDX_PolyA
     else:
         print(f"Invalid configuration name: {config_name}. Valid configurations are: {', '.join(VALID_CONFIGS)}")
         return None
