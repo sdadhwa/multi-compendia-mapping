@@ -70,6 +70,6 @@ if __name__ == "__main__":
         "PDX_ribo_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/Treehouse-PDX-Compendium-22.03-Ribodeplete_hugo_log2tpm_58581genes_2022-03-10.tsv",
         "PDX_ribo_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-Ribodeplete_for_GEO_20240520.tsv",
     }
-
     print(f"Files will be saved in: {RAW_DATA_DIR}\n")
     download_files(files_to_download)
+    # TODO: Use requests library to download data here.
