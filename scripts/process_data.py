@@ -1,17 +1,13 @@
 import os
-import sys 
 import pandas as pd
 import numpy as np
 import logging
 from preprocessing import process_expression_compendium
-from preprocessing import process_clinical_compendium 
+from preprocessing import process_clinical_compendium
+from paths import RAW_DATA_DIR, PROCESSED_DIR, EXPRESSION_FILE, CLINICAL_FILE
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-
-# Define directories
-RAW_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/raw")
-PROCESSED_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/processed")
 
 def load_tsv_files(directory):
     """
@@ -76,27 +72,24 @@ def load_clinical_files(directory):
 
     return clinical_dict
 
-
 def main():
     logging.info("Starting data processing pipeline...")
 
     # Ensure the processed data directory exists
-    os.makedirs(PROCESSED_DATA_DIR, exist_ok=True)
+    os.makedirs(PROCESSED_DIR, exist_ok=True)
 
     # Load and process expression data
     expression_dict = load_tsv_files(RAW_DATA_DIR)
     logging.info("Processing expression data...")
     processed_compendium = process_expression_compendium(expression_dict)
-    expression_output_path = os.path.join(PROCESSED_DATA_DIR, "processed_compendium.tsv")
-    processed_compendium.to_csv(expression_output_path, sep="\t")
-    logging.info(f"Processed expression data saved to {expression_output_path}")
+    processed_compendium.to_csv(EXPRESSION_FILE, sep="\t")
+    logging.info(f"Processed expression data saved to {EXPRESSION_FILE}")
 
     # Load, process, and merge clinical data
     clinical_dict = load_clinical_files(RAW_DATA_DIR)
     processed_clinical = process_clinical_compendium(clinical_dict)
-    clinical_output_path = os.path.join(PROCESSED_DATA_DIR, "processed_clinical_data.tsv")
-    processed_clinical.to_csv(clinical_output_path, sep="\t")
-    logging.info(f"Merged clinical data saved to {clinical_output_path}")
+    processed_clinical.to_csv(CLINICAL_FILE, sep="\t")
+    logging.info(f"Merged clinical data saved to {CLINICAL_FILE}")
 
 if __name__ == "__main__":
     main()
