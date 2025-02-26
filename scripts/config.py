@@ -2,10 +2,14 @@ import os
 
 class ScriptConfig:
     """
-    Base configuration class. Do not use attributes to access file or directory paths directly. Instead, use methods
-    provided. The attributes are meant to be overridden by subclasses for changes in file names or directory structure.
-    The included methods build the full paths to files and directories based on the attributes which are safe to use
-    in scripts.
+    Script Configurations define what data a script should use to run and the paths to the data within the project
+    structure. Script can use these configurations to download data, process data, and output data. This class is meant
+    to be subclassed for specific configurations.
+
+    Do not use attributes to access file or directory paths directly. Instead, use class methods provided. The
+    attributes are meant to be overridden by subclasses for changes in file names or directory structure.
+    The included class methods build the full paths to files and directories based on the attributes which is what
+    script can safely use.
 
     Attributes:
         project_root (str): The name of the project root directory.
