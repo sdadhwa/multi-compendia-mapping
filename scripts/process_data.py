@@ -1,10 +1,10 @@
 import os
 import pandas as pd
-import numpy as np
+import argparse
+from config import get_config, VALID_CONFIGS
 import logging
-from src.preprocessing import process_expression_compendium
-from src.preprocessing import process_clinical_compendium
-from paths import RAW_DATA_DIR, PROCESSED_DIR, EXPRESSION_FILE, CLINICAL_FILE
+from preprocessing import process_expression_compendium
+from preprocessing import process_clinical_compendium
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -73,23 +73,41 @@ def load_clinical_files(directory):
     return clinical_dict
 
 def main():
+    parser = argparse.ArgumentParser(description="Process genomic data files.")
+    parser.add_argument(
+        "--config",
+        type=str,
+        required=True,
+        help=f"Configuration name (e.g., {', '.join(VALID_CONFIGS)})"
+    )
+    args = parser.parse_args()
+
+    config = get_config(args.config)
+    if config is None:
+        print(f"Configuration not found. Available configurations are: {', '.join(VALID_CONFIGS)}")
+        exit(1)
+
+    raw_dir = config.raw_data_dir_path()
+    expression_file_path = config.expression_file_path()
+    clinical_file_path = config.clinical_file_path()
+
     logging.info("Starting data processing pipeline...")
 
     # Ensure the processed data directory exists
-    os.makedirs(PROCESSED_DIR, exist_ok=True)
+    os.makedirs(config.processed_dir_path(), exist_ok=True)
 
     # Load and process expression data
-    expression_dict = load_tsv_files(RAW_DATA_DIR)
+    expression_dict = load_tsv_files(raw_dir)
     logging.info("Processing expression data...")
     processed_compendium = process_expression_compendium(expression_dict)
-    processed_compendium.to_csv(EXPRESSION_FILE, sep="\t")
-    logging.info(f"Processed expression data saved to {EXPRESSION_FILE}")
+    processed_compendium.to_csv(expression_file_path, sep="\t")
+    logging.info(f"Processed expression data saved to {expression_file_path}")
 
     # Load, process, and merge clinical data
-    clinical_dict = load_clinical_files(RAW_DATA_DIR)
+    clinical_dict = load_clinical_files(raw_dir)
     processed_clinical = process_clinical_compendium(clinical_dict)
-    processed_clinical.to_csv(CLINICAL_FILE, sep="\t")
-    logging.info(f"Merged clinical data saved to {CLINICAL_FILE}")
+    processed_clinical.to_csv(clinical_file_path, sep="\t")
+    logging.info(f"Merged clinical data saved to {clinical_file_path}")
 
 if __name__ == "__main__":
     main()
