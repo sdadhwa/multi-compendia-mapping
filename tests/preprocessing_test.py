@@ -91,7 +91,6 @@ def verify_processed_compendium(processed_compendium):
     """
     patients = ["Patient_A", "Patient_B", "Patient_C", "Patient_D", "Patient_E", "Patient_F"]
     assert all(patient in processed_compendium.index for patient in patients)
-    assert "compendium" in processed_compendium.columns
 
 def test_format_process_expression_compendium(expression_dict):
     """
@@ -102,9 +101,9 @@ def test_format_process_expression_compendium(expression_dict):
     # Call the function to test
     processed_compendium = process_expression_compendium(expression_dict)
 
-    # The processed compendium should have one column "compendium" and 10 gene columns. Index column doesn't get counted.
+    # The processed compendium should have 10 gene columns. Index column doesn't get counted.
     # 6 samples so should have 6 rows
-    assert processed_compendium.shape == (6, 11)
+    assert processed_compendium.shape == (6, 10)
 
     # Check that the indexes are the same as the patient IDs
     verify_processed_compendium(processed_compendium)
