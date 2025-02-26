@@ -44,6 +44,36 @@ def expression_dict():
     return expression_dict
 
 @pytest.fixture
+def expression_dict_mismatched_genes():
+    """
+    Create a dictionary of expression dataframes for testing purposes. data1 and data2 represent two different compendia.
+    Both compendia have entries for 'gene_1' but only data1 has entries for 'gene_3', and only data2 has entries for
+    'gene_2'.
+    """
+
+    patients1 = ["Patient_A", "Patient_B", "Patient_C"]
+    patients2 = ["Patient_D", "Patient_E", "Patient_F"]
+
+    data1 = {
+        "gene_1": [5.2, 4.8, 5.0],
+        "gene_3": [7.5, 6.7, 7.0],
+    }
+
+    data2 = {
+        "gene_1": [5.1, 4.9, 5.0],
+        "gene_2": [3.2, 2.8, 3.1],
+    }
+
+    df1 = pd.DataFrame(data1, index=patients1)
+    df2 = pd.DataFrame(data2, index=patients2)
+
+    expression_dict = {
+        "compendium1": df1,
+        "compendium2": df2
+    }
+    return expression_dict
+
+@pytest.fixture
 def clinical_dict():
     """
     Create a dictionary of clinical dataframes for testing purposes. data1 and data2 represent two different compendia.
@@ -152,6 +182,33 @@ def test_min_var_process_expression_compendium(expression_dict):
         # Make sure that the other genes are still present
         for gene in gene_variances.nlargest(10 - i).index:
             assert gene in processed_compendium.columns
+
+def test_process_expression_compendium_mismatched_genes(expression_dict_mismatched_genes):
+    """
+    Test the process_expression_compendium function with a dictionary of expression dataframes that have
+    mismatched genes. Ensure that the processed compendium has all genes from the dictionary and that missing values
+    were filled with 0s.
+    """
+
+    processed_compendium = process_expression_compendium(expression_dict_mismatched_genes)
+
+    # Ensure all genes from the dictionary are present in the processed compendium
+    all_genes = set()
+    for df in expression_dict_mismatched_genes.values():
+        all_genes.update(df.columns)
+    assert all(gene in processed_compendium.columns for gene in all_genes)
+
+    # Ensure there are no NaN values in the processed compendium
+    assert not processed_compendium.isnull().values.any()
+
+    # Ensure that missing values were filled with 0s
+    for gene in all_genes:
+        for df in expression_dict_mismatched_genes.values():
+            if gene not in df.columns:
+                assert (processed_compendium.loc[df.index, gene] == 0).all()
+
+    # Ensure that the indexes are the same as the patient IDs
+    verify_processed_compendium(processed_compendium)
 
 def test_process_clinical_compendium(clinical_dict):
     """
