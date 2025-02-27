@@ -159,9 +159,24 @@ class TumorPolyA(ScriptConfig):
         "tumor_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_TumorCompendium_v11_PolyA_for_GEO_20240520.tsv",
     }
 
+class PDXCellLinePolyA(ScriptConfig):
+    """
+    Configuration for merging PDX\_polyA and Cell Line\_polyA data. This is useful for testing and development for
+    merging two relatively small compendia.
+    """
 
+    data_dir = os.path.join('data', 'pdx_cellline_polya')
+    expression_targets = {
+        "PDX_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu:443/download/Treehouse-PDX-Compendium-22.03-PolyA_hugo_log2tpm_58581genes_2022-03-09.tsv",
+        "cell_line_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/CellLinePolyA_21.06_hugo_log2tpm_58581genes_2021-06-15.tsv",
+    }
 
-VALID_CONFIGS = ["production", "pdx_polya", "tumor_polya"]
+    clinical_targets = {
+        "PDX_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
+        "cell_line_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_CellLinePolyA_21.06_for_GEO_20240520.tsv",
+    }
+
+VALID_CONFIGS = ["production", "pdx_polya", "tumor_polya", "pdx_cellline_polya"]
 
 def get_config(config_name):
     """
@@ -172,6 +187,7 @@ def get_config(config_name):
             - "production": Use the ProductionConfig class.
             - "pdx_polya": Use the PDX_PolyA class.
             - "tumor_polya": Use the TumorPolyA class.
+            - pdx_cellline_polya: Use the PDXCellLinePolyA class.
 
     Returns:
         ScriptConfig: The configuration class corresponding to the provided name, or None if an invalid configuration name is provided.
@@ -185,6 +201,8 @@ def get_config(config_name):
         return PDXPolyA
     elif config_name == "tumor_polya":
         return TumorPolyA
+    elif config_name == "pdx_cellline_polya":
+        return PDXCellLinePolyA
     else:
         print(f"Invalid configuration name: {config_name}. Valid configurations are: {', '.join(VALID_CONFIGS)}")
         return None
