@@ -2,7 +2,6 @@ import os
 import requests
 import argparse
 from config import get_config, VALID_CONFIGS
-from paths import RAW_DATA_DIR
 
 """
 Script to download genomic data and outputs both clinical and expression data files as TSV.
