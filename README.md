@@ -37,9 +37,9 @@ This script uses the 5 compendia types from the UCSC Treehouse Public Data to ge
 
 Run this block:
    ```sh
-   python scripts/download_data.py --config full
-   python scripts/process_data.py --config full
-   python scripts/generate_layouts.py --config full
+   python scripts/download_data.py --config production
+   python scripts/process_data.py --config production
+   python scripts/generate_layouts.py --config production
    ```
 
 ### 2. Single compendium mapping (PDX_polyA)
