@@ -146,8 +146,8 @@ class PDXPolyA(ScriptConfig):
 
 class TumorPolyA(ScriptConfig):
     """
-    Configuration for only Tumor\_polyA data. This is useful for testing and development for a single compendium and
-    no compendium merging.
+    Configuration for only Tumor\_polyA data. This is useful for testing and development for a single compendium that is
+    around 5.5 Gb. No compendium merging expected.
     """
 
     data_dir = os.path.join('data', 'tumor_polya')
@@ -158,6 +158,8 @@ class TumorPolyA(ScriptConfig):
     clinical_targets = {
         "tumor_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_TumorCompendium_v11_PolyA_for_GEO_20240520.tsv",
     }
+
+
 
 VALID_CONFIGS = ["production", "pdx_polya", "tumor_polya"]
 
