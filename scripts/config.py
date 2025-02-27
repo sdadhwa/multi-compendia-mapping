@@ -144,7 +144,22 @@ class PDXPolyA(ScriptConfig):
         "PDX_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
     }
 
-VALID_CONFIGS = ["production", "pdx_polya"]
+class TumorPolyA(ScriptConfig):
+    """
+    Configuration for only Tumor\_polyA data. This is useful for testing and development for a single compendium and
+    no compendium merging.
+    """
+
+    data_dir = os.path.join('data', 'tumor_polya')
+    expression_targets = {
+        "tumor_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/TumorCompendium_v11_PolyA_hugo_log2tpm_58581genes_2020-04-09.tsv",
+    }
+
+    clinical_targets = {
+        "tumor_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_TumorCompendium_v11_PolyA_for_GEO_20240520.tsv",
+    }
+
+VALID_CONFIGS = ["production", "pdx_polya", "tumor_polya"]
 
 def get_config(config_name):
     """
@@ -154,6 +169,7 @@ def get_config(config_name):
         config_name (str): The name of the configuration to use. Available options are:
             - "production": Use the ProductionConfig class.
             - "pdx_polya": Use the PDX_PolyA class.
+            - "tumor_polya": Use the TumorPolyA class.
 
     Returns:
         ScriptConfig: The configuration class corresponding to the provided name, or None if an invalid configuration name is provided.
@@ -165,6 +181,8 @@ def get_config(config_name):
         return ProductionConfig
     elif config_name == "pdx_polya":
         return PDXPolyA
+    elif config_name == "tumor_polya":
+        return TumorPolyA
     else:
         print(f"Invalid configuration name: {config_name}. Valid configurations are: {', '.join(VALID_CONFIGS)}")
         return None
