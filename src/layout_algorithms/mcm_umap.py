@@ -2,6 +2,7 @@ from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import umap
 from .base_layout import BaseLayout
+import seaborn as sns
 
 class MCMUmap(BaseLayout):
 
@@ -18,6 +19,9 @@ class MCMUmap(BaseLayout):
         Returns:
             pd.DataFrame: This dataframe should have dimension 2. The index should be the sample ids.
         """
+        
+        # Map seaborn for plotting
+        sns.set_theme(style="white", context='poster', rc={'figure.figsize': (14, 10)})
 
         # Standardize expression data
         scaler = StandardScaler()

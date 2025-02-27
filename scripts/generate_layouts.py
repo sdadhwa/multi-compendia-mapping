@@ -1,6 +1,8 @@
 import pandas as pd
 import argparse
 import matplotlib.pyplot as plt
+import seaborn as sns
+import umap
 from layout_algorithms.mcm_umap import MCMUmap
 from config import ScriptConfig, get_config, VALID_CONFIGS
 
@@ -25,14 +27,24 @@ if __name__ == '__main__':
 
     # Perform layout algorithm
     layout_df = layout_algorithm.fit_transform(expression_df)
-
-    # Assuming layout_df has columns 'UMAP1' and 'UMAP2'
-    plt.figure(figsize=(10, 6))
-    plt.scatter(layout_df['UMAP1'], layout_df['UMAP2'], s=10, alpha=0.7)
-    plt.title('UMAP Layout')
-    plt.xlabel('UMAP1')
-    plt.ylabel('UMAP2')
-    plt.grid(True)
-    plt.show()
-
-    pass
+    
+    def draw_umap(data, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclidean', title=''):
+        fit = umap.UMAP(
+            n_neighbors=n_neighbors,
+            min_dist=min_dist,
+            n_components=n_components,
+            metric=metric
+        )
+        u = fit.fit_transform(data)
+        fig = plt.figure()
+        if n_components == 1:
+            ax = fig.add_subplot(111)
+            ax.scatter(u[:,0], range(len(u)), c=data)
+        if n_components == 2:
+            ax = fig.add_subplot(111)
+            ax.scatter(u[:,0], u[:,1], c=data)
+        if n_components == 3:
+            ax = fig.add_subplot(111, projection='3d')
+            ax.scatter(u[:,0], u[:,1], u[:,2], c=data, s=100)
+        plt.title(title, fontsize=18)
+        plt.show()
