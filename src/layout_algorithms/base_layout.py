@@ -3,19 +3,22 @@ import pandas as pd
 
 class BaseLayout(ABC):
     """
-    API for threshold algorithms.
+    API for threshold algorithms. To make a new layout algorithm, inherit from this class and implement the fit_transform
+    method.
     """
 
     @abstractmethod
-    def fit_transform(self, expression_df: pd.DataFrame, clinical_df: pd.DataFrame) -> pd.DataFrame:
+    def fit_transform(self, expression_df: pd.DataFrame) -> pd.DataFrame:
         """
-        Perform the layout algorithm on the given data.
+        Perform a layout algorithm on the given dataframe. Examples TSNE, PCA, UMAP. The input should be high
+        dimensional gene expression data and the output should be a 2D representation of the data.
 
         Parameters:
-        expression_df (pd.DataFrame): The gene expression data.
-        clinical_df (pd.DataFrame): The clinical data.
+        expression_df (pd.DataFrame): The gene expression data. All columns should be genes and all rows should be
+            samples. The index should be the sample ids. There should be no missing values ie no NaNs. All samples
+            should have the same genes.
 
         Returns:
-        pd.DataFrame: The transformed data with layout coordinates.
+        pd.DataFrame: This dataframe should have dimension 2. The index should be the sample ids.
         """
         pass
