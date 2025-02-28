@@ -1,5 +1,5 @@
 # Multi-Compendia Mapping.py
-This project facilitates the mapping of gene clusters across multiple biological compendia types using data from the UCSC Treehouse Public Data. It provides scripts for processing different sets of data and generating gene cluster layouts using UMAP for dimensionality reduction. Additionally, Scanpy is used to trim the 20% least variable data before processing. The project supports  full multi-compendia mapping. [can we handle single?]
+This project facilitates the mapping of gene clusters across multiple biological compendia types using data from the UCSC Treehouse Public Data. It provides scripts for processing different sets of data and generating gene cluster layouts using UMAP for dimensionality reduction. Additionally, Scanpy is used to trim the 20% least variable data before processing. The project supports  full multi-compendia mapping, as well as single compendia mapping for development purposes. The configuration file can be updated to add more dtatasets/adjust existing sets in config.py.
 
 ## Setting Up the Conda Environment
 
