@@ -114,7 +114,7 @@ def main():
     # Load and process expression data
     expression_dict = load_tsv_files(raw_dir)
     logging.info("Processing expression data...")
-    processed_compendium = process_expression_compendium(expression_dict)
+    processed_compendium = process_expression_compendium(expression_dict, variance_threshold=20)
     logging.info('Writing expression data to file...')
     # Transpose the processed data to gene x sample format. This prevents having rows 50k+ columns long.
     # Prioritize legible rows.
