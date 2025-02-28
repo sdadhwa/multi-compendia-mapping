@@ -68,7 +68,7 @@ Each script generates processed gene cluster mapping layouts using UMAP. Before 
 
 TSV files containing processed data.
 
-JSON files with structured mapping information.
+UMAP files with structured mapping information.
 
 Visual representations (if applicable) stored in an output/ directory.
 
