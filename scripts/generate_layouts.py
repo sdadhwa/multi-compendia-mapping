@@ -50,4 +50,5 @@ if __name__ == '__main__':
         plt.title(title, fontsize=18)
         plt.show()
         
+        # Draw UMAP projection
         draw_umap(data=umap_df["clinical_feature"].values, embedding=layout_df.values, n_components=2, title="UMAP Projection")
