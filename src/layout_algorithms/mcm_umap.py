@@ -31,7 +31,7 @@ class MCMUmap(BaseLayout):
         embedding = reducer.fit_transform(expression_scaled)
 
         # Convert the embedding to a DataFrame
-        embedding_df = pd.DataFrame(embedding, index=expression_df.index, columns=['UMAP1', 'UMAP2'])
+        embedding_df = pd.DataFrame(embedding, index=expression_df.index, columns=['x', 'y'])
 
         return embedding_df
 
