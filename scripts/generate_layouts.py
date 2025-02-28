@@ -1,8 +1,7 @@
 import pandas as pd
 import argparse
 import matplotlib.pyplot as plt
-import seaborn as sns
-import umap
+import os
 from layout_algorithms.mcm_umap import MCMUmap
 from config import ScriptConfig, get_config, VALID_CONFIGS
 
@@ -41,6 +40,10 @@ if __name__ == '__main__':
 
     # Show the figure
     figure.show()
+
+    # Save the figure
+    os.makedirs(config.get_vis_dir_path(), exist_ok=True)
+    figure.savefig(config.get_figure_file_path(), dpi=300, bbox_inches='tight')
 
     # TODO add configuration for saving the figure
 
