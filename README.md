@@ -1,4 +1,5 @@
 # Multi-Compendia Mapping.py
+This project facilitates the mapping of gene clusters across multiple biological compendia types using data from the UCSC Treehouse Public Data. It provides scripts for processing different sets of data and generating gene cluster layouts using UMAP for dimensionality reduction. Additionally, Scanpy is used to trim the 20% least variable data before processing. The project supports  full multi-compendia mapping. [can we handle single?]
 
 ## Setting Up the Conda Environment
 
@@ -52,3 +53,47 @@ Run this block:
    python scripts/process_data.py --config pdx_polya
    python scripts/generate_layouts.py --config pdx_polya
    ```
+
+### Configuration Details
+
+The --config flag determines which dataset is used. Available options:
+
+production: Uses all five compendia for full mapping.
+
+pdx_polya: Uses only the PDX_polyA dataset.
+
+### Expected Output
+
+Each script generates processed gene cluster mapping layouts using UMAP. Before mapping, Scanpy is used to trim the 20% least variable data. The output format may include:
+
+TSV files containing processed data.
+
+JSON files with structured mapping information.
+
+Visual representations (if applicable) stored in an output/ directory.
+
+### Troubleshooting & Common Issues
+
+Environment Creation Fails: Ensure Conda is installed and the environment.yml file is correctly formatted.
+
+Module Import Errors: Activate the environment using conda activate mcomp-mapping-env before running scripts.
+
+Permission Errors: Run commands with the appropriate user privileges.
+
+### Contribution Guidelines [needed?]
+
+Contributions are welcome! Please follow these steps:
+
+Fork the repository.
+
+Create a new branch (git checkout -b feature-branch).
+
+Commit your changes (git commit -m "Added new feature").
+
+Push to the branch (git push origin feature-branch).
+
+Submit a pull request.
+
+### License [needs updates]
+
+This project is licensed under _____. See LICENSE file for details.
