@@ -44,6 +44,7 @@ if __name__ == '__main__':
     # Save the figure
     os.makedirs(config.get_vis_dir_path(), exist_ok=True)
     figure.savefig(config.get_figure_file_path(), dpi=300, bbox_inches='tight')
+    print(f"UMAP figure saved in {config.get_figure_file_path()}")
 
     # TODO add configuration for saving the figure
 
