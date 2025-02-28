@@ -19,9 +19,6 @@ class MCMUmap(BaseLayout):
         Returns:
             pd.DataFrame: This dataframe should have dimension 2. The index should be the sample ids.
         """
-        
-        # Map seaborn for plotting
-        sns(style="white", context='poster', rc={'figure.figsize': (14, 10)})
 
         # Standardize expression data
         scaler = StandardScaler()

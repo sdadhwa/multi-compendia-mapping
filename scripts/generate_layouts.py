@@ -36,13 +36,7 @@ if __name__ == '__main__':
     sns(style="white", context='poster', rc={'figure.figsize': (14, 10)})
 
     def draw_umap(data, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclidean', title=''):
-        fit = umap.UMAP(
-            n_neighbors=n_neighbors,
-            min_dist=min_dist,
-            n_components=n_components,
-            metric=metric
-        )
-        u = fit.fit_transform(data)
+        u = layout_df
         fig = plt.figure()
         if n_components == 1:
             ax = fig.add_subplot(111)
