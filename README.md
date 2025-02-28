@@ -75,11 +75,21 @@ Look in `multi-compendia-mapping/data/pdx_cellline_polya/vis/plot.png` for the v
 
 ### Configuration Details
 
-The --config flag determines which dataset is used. Available options:
+The following configuration options are available for running the scripts. Each configuration specifies different 
+datasets to include during the mapping workflow and paths that scripts can use to access the data.
 
-production: Uses all five compendia for full mapping.
+- `production`: Uses all five compendia for full mapping.
+- `pdx_polya`: Uses only the PDX_polyA dataset. This is useful for testing and development for a single compendium and no compendium merging.
+- `tumor_polya`: Uses only the Tumor_polyA dataset. This is useful for testing and development for a single compendium that is around 5.5 Gb. No compendium merging expected.
+- `pdx_cellline_polya`: Merges PDX_polyA and Cell Line_polyA data. This is useful for testing and development for merging two relatively small compendia.
 
-pdx_polya: Uses only the PDX_polyA dataset.
+These configurations can be specified using the --config flag when running the scripts. For example:
+```shell
+python scripts/download_data.py --config production
+```
+
+It is suggested that the workflow is completed start to finish ie download->process->layout using the same configuration.
+This will guarantee that expected data exits and can be accessed at each step.
 
 ### Expected Output
 
