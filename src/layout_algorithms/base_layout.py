@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import pandas as pd
-from matplotlib.pyplot import Figure
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 import seaborn as sns
 
 class BaseLayout(ABC):
@@ -39,4 +40,10 @@ class BaseLayout(ABC):
         Returns:
             Figure: The plot figure.
         """
-        pass
+        sns.set_theme(style="white", context='poster', rc={'figure.figsize': (14, 10)})
+        fig, ax = plt.subplots()
+        sns.scatterplot(data=data, x='x', y='y', hue='compendium', ax=ax, palette='tab10')
+        ax.set_title(title)
+        ax.legend(title='Compendium')
+
+        return fig
