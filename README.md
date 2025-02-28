@@ -41,6 +41,8 @@ Run this block:
    python scripts/process_data.py --config production
    python scripts/generate_layouts.py --config production
    ```
+Look in `multi-compendia-mapping/data/vis/plot.png` for the visualization.
+
 
 ### 2. Single compendium mapping (Development)
 
@@ -54,6 +56,7 @@ Run this block:
    python scripts/process_data.py --config pdx_polya
    python scripts/generate_layouts.py --config pdx_polya
    ```
+Look in `multi-compendia-mapping/data/pdx_polya/vis/plot.png` for the visualization.
 
 ### 3. Two compendium mapping (Development)
 
@@ -67,6 +70,7 @@ Run this block:
    python scripts/process_data.py --config pdx_cellline_polya
    python scripts/generate_layouts.py --config pdx_cellline_polya
    ```
+Look in `multi-compendia-mapping/data/pdx_cellline_polya/vis/plot.png` for the visualization.
 
 ### Configuration Details
 
