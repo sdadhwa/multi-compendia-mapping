@@ -23,6 +23,9 @@ if __name__ == '__main__':
     # Load expression data
     expression_df = pd.read_csv(config.expression_file_path(), sep="\t", index_col=0)
 
+    # File format is (gene, sample). Layout algorithms expect (sample, gene)
+    expression_df = expression_df.T
+
     layout_algorithm = MCMUmap()
 
     # Perform layout algorithm
