@@ -30,13 +30,13 @@ if __name__ == '__main__':
     
     # Load clinical data and merge with expression dataframe
     clinical_df = pd.read_csv(config.clinical_file_path(), sep="\t", index_col=0)
-    layout_df = layout_df.join(clinical_df, how='inner')
+    umap_df = layout_df.merge(clinical_df, left_index=True, right_index=True, how='inner')
 
     # Map seaborn for plotting
     sns(style="white", context='poster', rc={'figure.figsize': (14, 10)})
 
     def draw_umap(data, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclidean', title=''):
-        u = layout_df
+        u = umap_df
         fig = plt.figure()
         if n_components == 1:
             ax = fig.add_subplot(111)
