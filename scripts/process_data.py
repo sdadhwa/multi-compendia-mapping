@@ -96,16 +96,21 @@ def main():
     # Ensure the processed data directory exists
     os.makedirs(config.processed_dir_path(), exist_ok=True)
 
+    logging.info(f'Reading expression data files...')
     # Load and process expression data
     expression_dict = load_tsv_files(raw_dir)
     logging.info("Processing expression data...")
     processed_compendium = process_expression_compendium(expression_dict)
+    logging.info('Writing expression data to file...')
     processed_compendium.to_csv(expression_file_path, sep="\t")
     logging.info(f"Processed expression data saved to {expression_file_path}")
 
     # Load, process, and merge clinical data
+    logging.info("Reading clinical data files...")
     clinical_dict = load_clinical_files(raw_dir)
+    logging.info("Processing clinical data...")
     processed_clinical = process_clinical_compendium(clinical_dict)
+    logging.info("Writing clinical data to file...")
     processed_clinical.to_csv(clinical_file_path, sep="\t")
     logging.info(f"Merged clinical data saved to {clinical_file_path}")
 
