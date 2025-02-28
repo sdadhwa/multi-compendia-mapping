@@ -11,13 +11,16 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 def load_tsv_files(directory):
     """
-    Load all expression TSV files in the given directory into a dictionary of DataFrames.
+    Load all expression TSV files in the given directory into a dictionary of DataFrames. Data is stored in files in
+    (gene, sample) format. The DataFrames are transposed to (sample, gene) format when read from file. (Sample, gene)
+    format implies comparing samples instead of comparing genes.
 
     Args:
         directory (str): Path to the directory containing TSV files.
 
     Returns:
-        dict: Dictionary where keys are file names (without extension) and values are DataFrames.
+        dict: Dictionary where keys are file names (without extension) and values are DataFrames. The data frames are in
+            (sample, gene) format.
     """
     expression_dict = {}
 
@@ -29,6 +32,7 @@ def load_tsv_files(directory):
             file_path = os.path.join(directory, file_name)
             try:
                 df = pd.read_csv(file_path, sep="\t", index_col=0)
+                df = df.T  # Transpose so samples are rows and genes are columns
                 expression_dict[os.path.splitext(file_name)[0]] = df
                 logging.info(f"Loaded {file_name} ({df.shape[0]} rows, {df.shape[1]} columns)")
             except Exception as e:
@@ -73,6 +77,16 @@ def load_clinical_files(directory):
     return clinical_dict
 
 def main():
+    """
+    Main function to process genomic data files. Reads expression and clinical data files, processes them, merges them
+    into one expression compendium and one clinical compendium, and saves them to files.
+
+    Note: Expression data is stored in (gene, sample) format. This is counterintuitive because the goal is to compare
+    samples, not genes. However, this format is used to maintain consistency with the original data files. There
+    are also readability benefits to having fewer columns and more rows. The data is transposed to (sample, gene) format
+    before processing, and is transposed back to (gene, sample) format before saving.
+    """
+
     parser = argparse.ArgumentParser(description="Process genomic data files.")
     parser.add_argument(
         "--config",
@@ -102,7 +116,9 @@ def main():
     logging.info("Processing expression data...")
     processed_compendium = process_expression_compendium(expression_dict)
     logging.info('Writing expression data to file...')
-    processed_compendium.to_csv(expression_file_path, sep="\t")
+    # Transpose the processed data to gene x sample format. This prevents having rows 50k+ columns long.
+    # Prioritize legible rows.
+    processed_compendium.T.to_csv(expression_file_path, sep="\t")
     logging.info(f"Processed expression data saved to {expression_file_path}")
 
     # Load, process, and merge clinical data
