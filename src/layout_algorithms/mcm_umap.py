@@ -17,7 +17,9 @@ class MCMUmap(BaseLayout):
                 should have the same genes.
 
         Returns:
-            pd.DataFrame: This dataframe should have dimension 2. The index should be the sample ids.
+            pd.DataFrame: This dataframe should have dimension 2. Sample Ids are the index and the columns are 'UMAP1'
+                and 'UMAP2' representing the x and y coordinates of the UMAP embedding.
+
         """
 
         # Standardize expression data
