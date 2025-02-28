@@ -21,7 +21,7 @@ class MCMUmap(BaseLayout):
         """
         
         # Map seaborn for plotting
-        sns.set_theme(style="white", context='poster', rc={'figure.figsize': (14, 10)})
+        sns(style="white", context='poster', rc={'figure.figsize': (14, 10)})
 
         # Standardize expression data
         scaler = StandardScaler()
