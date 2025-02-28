@@ -33,7 +33,7 @@ if __name__ == '__main__':
     umap_df = layout_df.merge(clinical_df, left_index=True, right_index=True, how='inner')
 
     # Map seaborn for plotting
-    sns(style="white", context='poster', rc={'figure.figsize': (14, 10)})
+    sns.set_theme(style="white", context='poster', rc={'figure.figsize': (14, 10)})
 
     def draw_umap(data, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclidean', title=''):
         u = umap_df
@@ -49,3 +49,5 @@ if __name__ == '__main__':
             ax.scatter(u[:,0], u[:,1], u[:,2], c=data, s=100)
         plt.title(title, fontsize=18)
         plt.show()
+        
+        draw_umap(data=umap_df["clinical_feature"].values, embedding=layout_df.values, n_components=2, title="UMAP Projection")
