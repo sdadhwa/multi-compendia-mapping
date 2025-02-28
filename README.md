@@ -61,7 +61,8 @@ Look in `multi-compendia-mapping/data/pdx_polya/vis/plot.png` for the visualizat
 ### 3. Two compendium mapping (Development)
 
 This script uses the PDX_polyA and PDX_RiboDeplete compendia from UCSC Treehouse Public Data cluster mapping. This builds
-a compendium out of the two smallest datasets in the UCSC Treehouse Public Data. This is the fastest and most concise
+a compendium out of the two smallest datasets in the UCSC Treehouse Public Data. Data is trimmed to exclude the 20% least
+variable genes and then a UMAP algorithm is used to generate a layout plot. This is the fastest and most concise
 way to test the full workflow using Treehouse datasets.
 
 Run this block:
