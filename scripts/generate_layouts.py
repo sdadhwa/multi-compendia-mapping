@@ -35,7 +35,7 @@ if __name__ == '__main__':
     # Map seaborn for plotting
     sns.set_theme(style="white", context='poster', rc={'figure.figsize': (14, 10)})
 
-    def draw_umap(data, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclidean', title=''):
+    def draw_umap(data, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclidean', title='',output_path='umap_plot.png'):
         u = umap_df
         fig = plt.figure()
         if n_components == 1:
@@ -48,7 +48,8 @@ if __name__ == '__main__':
             ax = fig.add_subplot(111, projection='3d')
             ax.scatter(u[:,0], u[:,1], u[:,2], c=data, s=100)
         plt.title(title, fontsize=18)
-        plt.show()
         
-        # Draw UMAP projection
-        draw_umap(data=umap_df["clinical_feature"].values, embedding=layout_df.values, n_components=2, title="UMAP Projection")
+        # Save the plot
+        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        print(f"UMAP plot saved as {output_path}")
+        plt.show()
