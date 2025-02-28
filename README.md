@@ -80,7 +80,7 @@ Module Import Errors: Activate the environment using conda activate mcomp-mappin
 
 Permission Errors: Run commands with the appropriate user privileges.
 
-### Contribution Guidelines [needed?]
+### Contribution Guidelines
 
 Contributions are welcome! Please follow these steps:
 
@@ -96,4 +96,4 @@ Submit a pull request.
 
 ### License [needs updates]
 
-This project is licensed under _____. See LICENSE file for details.
+This project is licensed under an MIT license. See LICENSE file for details.
