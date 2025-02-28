@@ -28,6 +28,13 @@ if __name__ == '__main__':
     # Perform layout algorithm
     layout_df = layout_algorithm.fit_transform(expression_df)
     
+    # Load clinical data and merge with expression dataframe
+    clinical_df = pd.read_csv(config.clinical_file_path(), sep="\t", index_col=0)
+    layout_df = layout_df.join(clinical_df, how='inner')
+
+    # Map seaborn for plotting
+    sns(style="white", context='poster', rc={'figure.figsize': (14, 10)})
+
     def draw_umap(data, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclidean', title=''):
         fit = umap.UMAP(
             n_neighbors=n_neighbors,
