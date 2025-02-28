@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
 import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+import seaborn as sns
 
 class BaseLayout(ABC):
     """
@@ -22,3 +25,25 @@ class BaseLayout(ABC):
         pd.DataFrame: This dataframe should have dimension 2. The index should be the sample ids.
         """
         pass
+
+    @classmethod
+    def generate_plot(cls, data: pd.DataFrame, title: str) -> Figure:
+        """
+        Generate a plot of the data from the fit_transform method.
+
+        Parameters:
+        data (pd.DataFrame): The layout data. The index should be the sample ids. The columns holding plotting
+            coordinates should be 'x' and 'y'. There needs to be a column 'compendium' that holds the compendium of
+            origin for each sample.
+        title (str): The title of the plot.
+
+        Returns:
+            Figure: The plot figure.
+        """
+        sns.set_theme(style="white", context='poster', rc={'figure.figsize': (14, 10)})
+        fig, ax = plt.subplots()
+        sns.scatterplot(data=data, x='x', y='y', hue='compendium', ax=ax, palette='tab10')
+        ax.set_title(title)
+        ax.legend(title='Compendium')
+
+        return fig

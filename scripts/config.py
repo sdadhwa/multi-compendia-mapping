@@ -31,6 +31,8 @@ class ScriptConfig:
     data_dir = 'data'
     raw_data_dir = 'raw'
     processed_dir = 'processed'
+    visualization_dir = 'vis'
+    figure_file = 'plot.png'
     expression_file = 'processed_compendium.tsv'
     clinical_file = 'processed_clinical_data.tsv'
     expression_targets = {}
@@ -56,6 +58,20 @@ class ScriptConfig:
         Get the path to the processed data directory relative to the project root directory.
         """
         return os.path.join(cls.data_dir_path(), cls.processed_dir)
+
+    @classmethod
+    def get_vis_dir_path(cls):
+        """
+        Get the path to the visualization directory relative to the project root directory.
+        """
+        return os.path.join(cls.data_dir_path(), cls.visualization_dir)
+
+    @classmethod
+    def get_figure_file_path(cls):
+        """
+        Get the path to the figure file relative to the project root directory.
+        """
+        return os.path.join(cls.get_vis_dir_path(), cls.figure_file)
 
     @classmethod
     def expression_file_path(cls):

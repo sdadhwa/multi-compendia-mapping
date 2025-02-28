@@ -1,8 +1,7 @@
 import pandas as pd
 import argparse
 import matplotlib.pyplot as plt
-import seaborn as sns
-import umap
+import os
 from layout_algorithms.mcm_umap import MCMUmap
 from config import ScriptConfig, get_config, VALID_CONFIGS
 
@@ -35,8 +34,19 @@ if __name__ == '__main__':
     clinical_df = pd.read_csv(config.clinical_file_path(), sep="\t", index_col=0)
     umap_df = layout_df.merge(clinical_df, left_index=True, right_index=True, how='inner')
 
-    # Map seaborn for plotting
-    sns.set_theme(style="white", context='poster', rc={'figure.figsize': (14, 10)})
+    # Generate UMAP figure
+    # TODO make plot title configurable
+    figure = MCMUmap.generate_plot(umap_df, "UMAP Plot")
+
+    # Show the figure
+    figure.show()
+
+    # Save the figure
+    os.makedirs(config.get_vis_dir_path(), exist_ok=True)
+    figure.savefig(config.get_figure_file_path(), dpi=300, bbox_inches='tight')
+    print(f"UMAP figure saved in {config.get_figure_file_path()}")
+
+    # TODO add configuration for saving the figure
 
     def draw_umap(data, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclidean', title='',output_path='umap_plot.png'):
         u = umap_df

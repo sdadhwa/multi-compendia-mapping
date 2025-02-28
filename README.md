@@ -20,11 +20,10 @@ This project facilitates the mapping of gene clusters across multiple biological
 
 ## Running Scripts
 
-This project includes multiple scripts that process different sets of data and present various types of results. Each 
-script is designed to handle specific data configurations and generate outputs accordingly. Below is a description of
+Each script combines specific data sets to generate visualization/s for. Below is a description of
 each script and a block of commands to run them.
 
-### 1. Full Multi-Compendia Mapping
+### 1. Full Multi-Compendia Mapping (WIP)
 
 This script uses the 5 compendia types from the UCSC Treehouse Public Data to generate gene cluster mapping.
 
@@ -42,10 +41,14 @@ Run this block:
    python scripts/process_data.py --config production
    python scripts/generate_layouts.py --config production
    ```
+Look in `multi-compendia-mapping/data/vis/plot.png` for the visualization.
 
-### 2. Single compendium mapping (PDX_polyA)
 
-This script uses the PDX_polyA compendium from UCSC Treehouse Public Data cluster mapping.
+### 2. Single compendium mapping (Development)
+
+This script uses the PDX_polyA compendium from UCSC Treehouse Public Data cluster mapping. It is the smallest dataset
+in the UCSC Treehouse Public Data and is used for development purposes. Primarily useful in testing file downloading
+and visualization cosmetics.
 
 Run this block:
    ```sh
@@ -53,6 +56,22 @@ Run this block:
    python scripts/process_data.py --config pdx_polya
    python scripts/generate_layouts.py --config pdx_polya
    ```
+Look in `multi-compendia-mapping/data/pdx_polya/vis/plot.png` for the visualization.
+
+### 3. Two compendium mapping (Development)
+
+This script uses the PDX_polyA and PDX_RiboDeplete compendia from UCSC Treehouse Public Data cluster mapping. This builds
+a compendium out of the two smallest datasets in the UCSC Treehouse Public Data. Data is trimmed to exclude the 20% least
+variable genes and then a UMAP algorithm is used to generate a layout plot. This is the fastest and most concise
+way to test the full workflow using Treehouse datasets.
+
+Run this block:
+   ```sh
+   python scripts/download_data.py --config pdx_cellline_polya
+   python scripts/process_data.py --config pdx_cellline_polya
+   python scripts/generate_layouts.py --config pdx_cellline_polya
+   ```
+Look in `multi-compendia-mapping/data/pdx_cellline_polya/vis/plot.png` for the visualization.
 
 ### Configuration Details
 
