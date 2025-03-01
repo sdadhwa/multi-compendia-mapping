@@ -145,6 +145,28 @@ class ProductionConfig(ScriptConfig):
         "PDX_ribo_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-Ribodeplete_for_GEO_20240520.tsv"
     }
 
+class ProductionConfigWithoutTumorPolyA(ScriptConfig):
+    """
+    Configuration for production data without tumor_polyA data. The tumor_polyA is the largest dataset so excluding it
+    can be useful for testing and development across multiple compendia without being too large.
+    """
+
+    data_dir = os.path.join('data', 'production_without_tumor_polya')
+
+    expression_targets = {
+        "tumor_ribo_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/TreehousePEDv9_Ribodeplete_unique_hugo_log2_tpm_plus_1.2019-03-25.tsv",
+        "cell_line_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu/download/CellLinePolyA_21.06_hugo_log2tpm_58581genes_2021-06-15.tsv",
+        "PDX_polyA_expression.tsv": "https://xena.treehouse.gi.ucsc.edu:443/download/Treehouse-PDX-Compendium-22.03-PolyA_hugo_log2tpm_58581genes_2022-03-09.tsv",
+        "PDX_ribo_expression.tsv": "https://xena.treehouse.gi.ucsc.edu:443/download/Treehouse-PDX-Compendium-22.03-Ribodeplete_hugo_log2tpm_58581genes_2022-03-10.tsv"
+    }
+
+    clinical_targets = {
+        "tumor_ribo_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu:443/download/TreehousePEDv9_Ribodeplete_clinical_metadata_for_GEO_20240520.tsv",
+        "cell_line_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_CellLinePolyA_21.06_for_GEO_20240520.tsv",
+        "PDX_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-PolyA_for_GEO_20240520.tsv",
+        "PDX_ribo_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_Treehouse-PDX-Compendium-22.03-Ribodeplete_for_GEO_20240520.tsv"
+    }
+
 class PDXPolyA(ScriptConfig):
     """
     Configuration for only PDX\_polyA data. This is useful for testing and development for a single compendium and
@@ -192,7 +214,7 @@ class PDXCellLinePolyA(ScriptConfig):
         "cell_line_polyA_clinical.tsv": "https://xena.treehouse.gi.ucsc.edu/download/clinical_CellLinePolyA_21.06_for_GEO_20240520.tsv",
     }
 
-VALID_CONFIGS = ["production", "pdx_polya", "tumor_polya", "pdx_cellline_polya"]
+VALID_CONFIGS = ["production", "pdx_polya", "tumor_polya", "pdx_cellline_polya", "production_without_tumor_polya"]
 
 def get_config(config_name):
     """
@@ -203,7 +225,8 @@ def get_config(config_name):
             - "production": Use the ProductionConfig class.
             - "pdx_polya": Use the PDX_PolyA class.
             - "tumor_polya": Use the TumorPolyA class.
-            - pdx_cellline_polya: Use the PDXCellLinePolyA class.
+            - "pdx_cellline_polya": Use the PDXCellLinePolyA class.
+            - "production_without_tumor_polya": Use the ProductionConfigWithoutTumorPolyA class.
 
     Returns:
         ScriptConfig: The configuration class corresponding to the provided name, or None if an invalid configuration name is provided.
@@ -219,6 +242,8 @@ def get_config(config_name):
         return TumorPolyA
     elif config_name == "pdx_cellline_polya":
         return PDXCellLinePolyA
+    elif config_name == "production_without_tumor_polya":
+        return ProductionConfigWithoutTumorPolyA
     else:
         print(f"Invalid configuration name: {config_name}. Valid configurations are: {', '.join(VALID_CONFIGS)}")
         return None
