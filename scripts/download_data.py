@@ -1,54 +1,80 @@
 import os
 import requests
 import argparse
+import logging
 from config import get_config, VALID_CONFIGS
+from urllib3.exceptions import InsecureRequestWarning
+import urllib3
 
-"""
-Script to download genomic data and outputs both clinical and expression data files as TSV.
-"""
+# Suppress HTTPS warnings
+urllib3.disable_warnings(InsecureRequestWarning)
+
+# Logging set up
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
+
+def get_file_size(url):
+    """
+    Get the size of a file from a given URL before downloading.
+
+    Args:
+        url (str): File URL.
+
+    Returns:
+        str: File size in MB or "Unknown MB" if not retrievable.
+    """
+    try:
+        response = requests.head(url, verify=False)
+        size = int(response.headers.get('content-length', -1)) / (1024 * 1024)
+        return f"{size:.2f} MB" if size > 0 else "Unknown MB"
+    except Exception:
+        return "Unknown MB"
 
 def download_file(url: str, file_path: str):
     """
     Downloads a file from the given URL and saves it in the specified file path.
 
-    Parameters:
-    url (str): The file URL.
-    file_path (str): The full file path to save the file.
+    Args:
+        url (str): The file URL.
+        file_path (str): The full file path to save the file.
     """
     try:
-        # Bypass SSL verification
-        response = requests.get(url, stream=True, verify=False)
-        response.raise_for_status()
-
         # Ensure the directory exists
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        # Get file size before downloading
+        file_size = get_file_size(url)
+        filename = os.path.basename(file_path)
+
+        logger.info(f"Starting download: {filename} ({file_size}) from {url}")
+
+        response = requests.get(url, stream=True, verify=False)
+        response.raise_for_status()
 
         with open(file_path, "wb") as file:
             for chunk in response.iter_content(chunk_size=8192):
                 file.write(chunk)
 
-        print(f"Downloaded: {file_path}")
+        logger.info(f"Download complete: {file_path}\n")
 
     except requests.exceptions.RequestException as e:
-        print(f"Failed to download {file_path}: {e}")
+        logger.error(f"Failed to download {file_path}: {e}")
 
 def download_files(file_dict):
     """
-    Downloads multiple files from a dictionary. The keys are file paths and the values are URLs.
+    Downloads multiple files from a dictionary.
 
     Args:
         file_dict (dict): Dictionary where keys are file paths and values are URLs.
     """
-
     for file_path, url in file_dict.items():
-        filename = os.path.basename(file_path)
-        print(f"Downloading {filename} from {url}...")
         download_file(url, file_path)
 
 if __name__ == "__main__":
-  #feature/script-config
     parser = argparse.ArgumentParser(description="Download genomic data files.")
-    # Create an argument for the configuration name
     parser.add_argument(
         "--config",
         type=str,
@@ -56,12 +82,10 @@ if __name__ == "__main__":
         help=f"Configuration name (e.g., {', '.join(VALID_CONFIGS)})"
     )
     args = parser.parse_args()
-    
-    # Get the configuration class based on the configuration name
+
     config = get_config(args.config)
     if config is None:
-        # If the configuration is not found, indicate which configurations are available and exit.
-        print(f"Configuration not found. Available configurations are:{VALID_CONFIGS}")
+        logger.error(f"Configuration not found. Available configurations are: {VALID_CONFIGS}")
         exit(1)
 
     # Create the raw data directory if it does not exist
@@ -70,5 +94,5 @@ if __name__ == "__main__":
     # Merge expression and clinical file paths and url targets into a single dictionary
     files_to_download = {**config.get_path_expression_url_targets(), **config.get_path_clinical_url_targets()}
 
-    print(f"Files will be saved in: {config.raw_data_dir_path()}\n")
+    logger.info(f"\nFiles will be saved in: {config.raw_data_dir_path()}\n")
     download_files(files_to_download)
