@@ -58,7 +58,7 @@ class BaseLayout(ABC):
         # Create the scatter plot with the custom color palette
         scatter = sns.scatterplot(
             data=data, x='x', y='y', hue='compendium', ax=ax,
-            palette=compendium_colors, s=100, alpha=0.7, edgecolors='none'
+            palette=compendium_colors, s=100, alpha=0.3, edgecolors='none'
         )
 
         # Set the title
@@ -72,13 +72,13 @@ class BaseLayout(ABC):
             line.set_alpha(1)  # Set legend markers to full opacity
 
         if n_components == 1:
-            ax.scatter(data.iloc[:, 0], range(len(data)), cmap=cmap, alpha=0.7, edgecolors='none', s=80)
+            ax.scatter(data.iloc[:, 0], range(len(data)), cmap=cmap, alpha=0.3, edgecolors='none', s=80)
             ax.set_xlabel("UMAP_1", fontsize=14)
             ax.set_ylabel("Index", fontsize=14)
             ax.set_title(title, fontsize=16, fontweight='bold')
 
         elif n_components == 2:
-            scatter = ax.scatter(data.iloc[:, 0], data.iloc[:, 1], cmap=cmap, alpha=0.7, edgecolors='none', s=80)
+            scatter = ax.scatter(data.iloc[:, 0], data.iloc[:, 1], cmap=cmap, alpha=0.3, edgecolors='none', s=80)
             ax.set_xlabel("UMAP_1", fontsize=14)
             ax.set_ylabel("UMAP_2", fontsize=14)
             ax.set_title(title, fontsize=16, fontweight='bold')
@@ -86,7 +86,7 @@ class BaseLayout(ABC):
 
         elif n_components == 3:
             ax = fig.add_subplot(111, projection='3d')
-            scatter = ax.scatter(data.iloc[:, 0], data.iloc[:, 1], data.iloc[:, 2], cmap=cmap, alpha=0.7, edgecolors='none', s=80)
+            scatter = ax.scatter(data.iloc[:, 0], data.iloc[:, 1], data.iloc[:, 2], cmap=cmap, alpha=0.3, edgecolors='none', s=80)
             ax.set_xlabel("UMAP_1", fontsize=14)
             ax.set_ylabel("UMAP_2", fontsize=14)
             ax.set_zlabel("UMAP_3", fontsize=14)
