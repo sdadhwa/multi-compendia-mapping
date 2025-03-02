@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import argparse
+import time
 from config import get_config, VALID_CONFIGS
 import logging
 from preprocessing import process_expression_compendium
@@ -86,7 +87,6 @@ def main():
     are also readability benefits to having fewer columns and more rows. The data is transposed to (sample, gene) format
     before processing, and is transposed back to (gene, sample) format before saving.
     """
-
     parser = argparse.ArgumentParser(description="Process genomic data files.")
     parser.add_argument(
         "--config",
@@ -110,23 +110,22 @@ def main():
     # Ensure the processed data directory exists
     os.makedirs(config.processed_dir_path(), exist_ok=True)
 
-    logging.info(f'Reading expression data files...')
     # Load and process expression data
+    logging.info(f"Reading expression data files from {raw_dir}...")
+    start_time = time.time()
     expression_dict = load_tsv_files(raw_dir)
     logging.info("Processing expression data...")
     processed_compendium = process_expression_compendium(expression_dict, variance_threshold=20)
-    logging.info('Writing expression data to file...')
-    # Transpose the processed data to gene x sample format. This prevents having rows 50k+ columns long.
-    # Prioritize legible rows.
+    logging.info(f"Writing processed expression data to {expression_file_path}...")
     processed_compendium.T.to_csv(expression_file_path, sep="\t")
-    logging.info(f"Processed expression data saved to {expression_file_path}")
+    logging.info(f"Processed expression data saved to {expression_file_path}. Time taken: {time.time() - start_time:.2f}s")
 
     # Load, process, and merge clinical data
     logging.info("Reading clinical data files...")
     clinical_dict = load_clinical_files(raw_dir)
     logging.info("Processing clinical data...")
     processed_clinical = process_clinical_compendium(clinical_dict)
-    logging.info("Writing clinical data to file...")
+    logging.info(f"Writing processed clinical data to {clinical_file_path}...")
     processed_clinical.to_csv(clinical_file_path, sep="\t")
     logging.info(f"Merged clinical data saved to {clinical_file_path}")
 
