@@ -5,6 +5,7 @@ import logging
 from config import get_config, VALID_CONFIGS
 from urllib3.exceptions import InsecureRequestWarning
 import urllib3
+import time  
 
 # Disable SSL warnings
 urllib3.disable_warnings(InsecureRequestWarning)
@@ -16,56 +17,57 @@ logging.basicConfig(
 )
 
 def format_size(bytes_size):
-    """Convert bytes format in MB or GB."""
-    mb_size = bytes_size / (1024 * 1024)  # Convert bytes to MB
-    if mb_size > 1024:
-        return f"{mb_size / 1024:.2f} GB" # Converts to GB
-    return f"{mb_size:.2f} MB"
+    """Convert bytes to MB or GB for readability."""
+    mb_size = bytes_size / (1024 * 1024)
+    return f"{mb_size / 1024:.2f} GB" if mb_size > 1024 else f"{mb_size:.2f} MB"
 
 def download_file(url: str, file_path: str):
     """
-    Downloads a file from the given URL and logs its progress with size in MB/GB.
+    Downloads a file from the given URL and logs progress without external libraries.
 
     Parameters:
     url (str): The file URL.
     file_path (str): The full file path to save the file.
     """
     try:
-        # Send a HEAD request to get the file size
+        # Get file size
         response = requests.head(url, allow_redirects=True, verify=False)
-        file_size = response.headers.get('content-length')
-
-        if file_size:
-            file_size = int(file_size)
-            file_size_str = format_size(file_size)
-        else:
-            file_size_str = "Unknown size"
+        file_size = int(response.headers.get('content-length', 0))  # Get file size in bytes
+        file_size_str = format_size(file_size) if file_size else "Unknown size"
 
         logging.info(f"Starting download: {os.path.basename(file_path)} ({file_size_str}) from {url}")
 
-        # Ensure the directory exists
+        # Ensure directory exists
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
-        # Download file
+        # Download file with progress tracking
         response = requests.get(url, stream=True, verify=False)
         response.raise_for_status()
 
-        with open(file_path, "wb") as file:
-            for chunk in response.iter_content(chunk_size=8192):
-                file.write(chunk)
+        downloaded_size = 0  # Track downloaded bytes
+        start_time = time.time()  # Track download time
 
-        logging.info(f"Download complete: {file_path}")
+        with open(file_path, "wb") as file:
+            for chunk in response.iter_content(chunk_size=8192):  # 8KB chunks
+                if chunk:
+                    file.write(chunk)
+                    downloaded_size += len(chunk)
+                    
+                    # Calculate percentage
+                    if file_size:
+                        percent_done = (downloaded_size / file_size) * 100
+                        progress_bar = f"[{'=' * int(percent_done // 2)}{' ' * (50 - int(percent_done // 2))}]"
+                        elapsed_time = time.time() - start_time
+                        speed = (downloaded_size / (1024 * 1024)) / elapsed_time if elapsed_time > 0 else 0
+                        print(f"\r{progress_bar} {percent_done:.2f}% - {format_size(downloaded_size)} downloaded - {speed:.2f} MB/s", end="")
+
+        logging.info(f"\nDownload complete: {file_path}")
 
     except requests.exceptions.RequestException as e:
         logging.error(f"Failed to download {file_path}: {e}")
 
 def download_files(file_dict):
-    """
-    Downloads multiple files from a dictionary. The keys are file paths and the values are URLs.
-
-    Args:
-        file_dict (dict): Dictionary where keys are file paths and values are URLs.
-    """
+    """Downloads multiple files with real-time progress tracking."""
     for file_path, url in file_dict.items():
         filename = os.path.basename(file_path)
         logging.info(f"Downloading {filename} from {url}...")
