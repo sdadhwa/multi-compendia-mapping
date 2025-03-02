@@ -16,10 +16,10 @@ logging.basicConfig(
 )
 
 def format_size(bytes_size):
-    """Convert bytes to a human-readable format in MB or GB."""
+    """Convert bytes format in MB or GB."""
     mb_size = bytes_size / (1024 * 1024)  # Convert bytes to MB
     if mb_size > 1024:
-        return f"{mb_size / 1024:.2f} GB"
+        return f"{mb_size / 1024:.2f} GB" # Converts to GB
     return f"{mb_size:.2f} MB"
 
 def download_file(url: str, file_path: str):
