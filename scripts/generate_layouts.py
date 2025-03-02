@@ -2,10 +2,19 @@ import pandas as pd
 import argparse
 import matplotlib.pyplot as plt
 import os
+import logging
 from layout_algorithms.mcm_umap import MCMUmap
 from config import ScriptConfig, get_config, VALID_CONFIGS
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 if __name__ == '__main__':
+    logging.info("Starting UMAP layout generation process...")
+
     # Command line argument parser to get configuration
     parser = argparse.ArgumentParser(description="Process genomic data files.")
     parser.add_argument(
@@ -18,23 +27,32 @@ if __name__ == '__main__':
 
     # Get configuration
     config = get_config(args.config)
+    logging.info(f"Using configuration: {args.config}")
 
     # Load expression data
+    logging.info("Loading expression data...")
     expression_df = pd.read_csv(config.expression_file_path(), sep="\t", index_col=0)
 
     # File format is (gene, sample). Layout algorithms expect (sample, gene)
     expression_df = expression_df.T
+    logging.info(f"Expression data loaded: {expression_df.shape[0]} samples, {expression_df.shape[1]} genes.")
 
+    # Initialize layout algorithm
     layout_algorithm = MCMUmap()
 
     # Perform layout algorithm
+    logging.info("Performing UMAP dimensionality reduction...")
     layout_df = layout_algorithm.fit_transform(expression_df)
-    
+    logging.info("UMAP transformation complete.")
+
     # Load clinical data and merge with expression dataframe
+    logging.info("Loading clinical data...")
     clinical_df = pd.read_csv(config.clinical_file_path(), sep="\t", index_col=0)
     umap_df = layout_df.merge(clinical_df, left_index=True, right_index=True, how='inner')
+    logging.info(f"Clinical data merged: {umap_df.shape[0]} total samples.")
 
     # Generate UMAP figure using the method defined above
+    logging.info("Generating UMAP plot...")
     figure = MCMUmap.generate_plot(umap_df, "UMAP Plot")
 
     # Show the figure
@@ -42,5 +60,7 @@ if __name__ == '__main__':
 
     # Save the figure
     os.makedirs(config.get_vis_dir_path(), exist_ok=True)
-    figure.savefig(config.get_figure_file_path(), dpi=300, bbox_inches='tight')
-    print(f"UMAP figure saved in {config.get_figure_file_path()}")
+    figure_path = config.get_figure_file_path()
+    figure.savefig(figure_path, dpi=300, bbox_inches='tight')
+
+    logging.info(f"UMAP figure saved at: {figure_path}")
