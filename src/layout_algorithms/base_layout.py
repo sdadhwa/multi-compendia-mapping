@@ -28,7 +28,7 @@ class BaseLayout(ABC):
         pass
 
     @classmethod
-    def generate_plot(cls, data: pd.DataFrame, title: str, n_components=2, cmap='viridis', output_path='umap_plot.png') -> Figure:
+    def generate_plot(cls, data: pd.DataFrame, title: str) -> Figure:
         """
         Generate a plot of the data from the fit_transform method.
 
@@ -37,9 +37,6 @@ class BaseLayout(ABC):
             coordinates should be 'x' and 'y'. There needs to be a column 'compendium' that holds the compendium of
             origin for each sample.
         title (str): The title of the plot.
-        n_components (int): Number of components for the plot (1, 2, or 3).
-        cmap (str): The color map to use (default is 'viridis').
-        output_path (str): Path to save the plot image.
 
         Returns:
             Figure: The plot figure.
@@ -50,8 +47,7 @@ class BaseLayout(ABC):
 
         # Create the scatter plot with the custom color palette
         scatter = sns.scatterplot(
-            data=data, x='x', y='y', hue='compendium', ax=ax,
-            palette="compendium", s=100, alpha=0.3, edgecolors='none'
+            data=data, x='x', y='y', hue='compendium', ax=ax, s=100, alpha=0.3, edgecolors='none'
         )
 
         # Set the title
@@ -64,12 +60,11 @@ class BaseLayout(ABC):
         for line in scatter.legend_.get_lines():
             line.set_alpha(1)  # Set legend markers to full opacity
 
-        if n_components == 2:
-            scatter = ax.scatter(data.iloc[:, 0], data.iloc[:, 1], cmap=cmap, alpha=0.3, edgecolors='none', s=80)
-            ax.set_xlabel("UMAP_1", fontsize=14)
-            ax.set_ylabel("UMAP_2", fontsize=14)
-            ax.set_title(title, fontsize=16, fontweight='bold')
-            ax.grid(True, linestyle='--', alpha=0.5)
+        scatter = ax.scatter(data.iloc[:, 0], data.iloc[:, 1], alpha=0.3, edgecolors='none', s=80)
+        ax.set_xlabel("UMAP_1", fontsize=14)
+        ax.set_ylabel("UMAP_2", fontsize=14)
+        ax.set_title(title, fontsize=16, fontweight='bold')
+        ax.grid(True, linestyle='--', alpha=0.5)
 
         # Save and show the figure
         plt.tight_layout()
