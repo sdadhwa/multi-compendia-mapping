@@ -58,7 +58,7 @@ class BaseLayout(ABC):
         # Create the scatter plot with the custom color palette
         scatter = sns.scatterplot(
             data=data, x='x', y='y', hue='compendium', ax=ax,
-            palette=compendium_colors, s=100, alpha=0.3, edgecolors='none'
+            palette="compendium", s=100, alpha=0.3, edgecolors='none'
         )
 
         # Set the title
@@ -71,33 +71,13 @@ class BaseLayout(ABC):
         for line in scatter.legend_.get_lines():
             line.set_alpha(1)  # Set legend markers to full opacity
 
-        if n_components == 1:
-            ax.scatter(data.iloc[:, 0], range(len(data)), cmap=cmap, alpha=0.3, edgecolors='none', s=80)
-            ax.set_xlabel("UMAP_1", fontsize=14)
-            ax.set_ylabel("Index", fontsize=14)
-            ax.set_title(title, fontsize=16, fontweight='bold')
-
-        elif n_components == 2:
+        if n_components == 2:
             scatter = ax.scatter(data.iloc[:, 0], data.iloc[:, 1], cmap=cmap, alpha=0.3, edgecolors='none', s=80)
             ax.set_xlabel("UMAP_1", fontsize=14)
             ax.set_ylabel("UMAP_2", fontsize=14)
             ax.set_title(title, fontsize=16, fontweight='bold')
             ax.grid(True, linestyle='--', alpha=0.5)
 
-        elif n_components == 3:
-            ax = fig.add_subplot(111, projection='3d')
-            scatter = ax.scatter(data.iloc[:, 0], data.iloc[:, 1], data.iloc[:, 2], cmap=cmap, alpha=0.3, edgecolors='none', s=80)
-            ax.set_xlabel("UMAP_1", fontsize=14)
-            ax.set_ylabel("UMAP_2", fontsize=14)
-            ax.set_zlabel("UMAP_3", fontsize=14)
-            ax.set_title(title, fontsize=16, fontweight='bold')
-            ax.view_init(elev=20, azim=135)
-            ax.grid(True, linestyle='--', alpha=0.5)
-
         # Save and show the figure
         plt.tight_layout()
-        plt.savefig(output_path, dpi=300, bbox_inches='tight')
-        print(f"UMAP plot saved as {output_path}")
-        plt.show()
-
         return fig
