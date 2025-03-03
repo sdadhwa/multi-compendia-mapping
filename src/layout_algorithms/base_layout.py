@@ -44,13 +44,6 @@ class BaseLayout(ABC):
         Returns:
             Figure: The plot figure.
         """
-        # Define custom colors for each compendium
-        compendium_colors = {
-            'PDX_polyA_clinical':'#FF6347',  # Tomato red
-            'cell_line_polyA_clinical': '#4682B4',   # Steel blue
-            'PDX_ribo_clinical': '#8A2BE2',     # Blue violet
-            'tumor_ribo_clinical': '#FFD700',     # Gold
-        }
         
         sns.set_theme(style="white", context='poster', rc={'figure.figsize': (14, 10)})
         fig, ax = plt.subplots()
