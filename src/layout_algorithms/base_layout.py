@@ -61,8 +61,6 @@ class BaseLayout(ABC):
             line.set_alpha(1)  # Set legend markers to full opacity
 
         scatter = ax.scatter(data.iloc[:, 0], data.iloc[:, 1], alpha=0.3, edgecolors='none', s=80)
-        ax.set_xlabel("UMAP_1", fontsize=14)
-        ax.set_ylabel("UMAP_2", fontsize=14)
         ax.set_title(title, fontsize=16, fontweight='bold')
         ax.grid(True, linestyle='--', alpha=0.5)
 
