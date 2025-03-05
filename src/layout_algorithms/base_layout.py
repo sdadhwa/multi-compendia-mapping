@@ -32,6 +32,9 @@ class BaseLayout(ABC):
         """
         Generate a plot of the data from the fit_transform method.
 
+        This method creates a scatter plot for each unique compendium in the data. It maps each compendium name to its
+        corresponding scatter plot object, allowing for interactive toggling of scatter plot visibility via legend clicks.
+
         Parameters:
         data (pd.DataFrame): The layout data. The index should be the sample ids. The columns holding plotting
             coordinates should be 'x' and 'y'. There needs to be a column 'compendium' that holds the compendium of
