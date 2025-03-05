@@ -48,12 +48,11 @@ class BaseLayout(ABC):
         # Dictionary to store scatter plot objects
         scatter_objects = {}
 
-        # Plot each compendium separately
         unique_compendia = data['compendium'].unique()
         for compendium in unique_compendia:
             subset = data[data['compendium'] == compendium]
-            scatter = sns.scatterplot(data=subset, x='x', y='y', ax=ax, s=100, alpha=1.0, edgecolors='none', label=compendium)
-            scatter_objects[compendium] = scatter  # Store scatter plot object
+            scatter = ax.scatter(subset['x'], subset['y'], s=100, alpha=1.0, edgecolors='none', label=compendium)
+            scatter_objects[compendium] = scatter
 
         # Set the title
         ax.set_title(title)
@@ -62,7 +61,32 @@ class BaseLayout(ABC):
         ax.grid(True, linestyle='--', alpha=0.5)
 
         # Customize the legend
-        ax.legend(title='Compendium', loc='center left', bbox_to_anchor=(1, 0.5), title_fontsize=14, fontsize=12)
+        legend = ax.legend(title='Compendium', loc='center left', bbox_to_anchor=(1, 0.5), title_fontsize=14, fontsize=12)
+
+        # Map legend text to scatter objects
+        legend_items = {text.get_text(): scatter_objects[text.get_text()] for text in legend.get_texts()}
+
+        def on_legend_click(event):
+            """
+            Toggle visibility of the scatter plot corresponding to the clicked legend text.
+            """
+            artist = event.artist   # The Matplotlib artist that was clicked (e.g., a line, scatter plot, etc.)
+            # Check if the artist is a Text object
+            if isinstance(artist, plt.Text):
+                artist_text = artist.get_text()  # Get the text of the artist
+                # Check if the text is a compendium name corresponding to a scatter.
+                if artist_text in legend_items:
+                    scatter_obj = legend_items[artist_text]
+                    scatter_obj.set_alpha(0 if scatter_obj.get_alpha() == 1 else 1)  # Toggle between 0 and 1
+                    artist.set_alpha(1 if scatter_obj.get_alpha() == 1 else 0.3)  # Dim legend text if hidden
+                    fig.canvas.draw_idle()  # Refresh the plot
+
+        # Connect event listener
+        fig.canvas.mpl_connect("pick_event", lambda event: on_legend_click(event))
+
+        # Set picker property for legend text. This ensures that the legend fires a pick_event when clicked.
+        for text in legend.get_texts():
+            text.set_picker(True)
 
         # Save and show the figure
         plt.tight_layout()
