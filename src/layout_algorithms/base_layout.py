@@ -45,20 +45,21 @@ class BaseLayout(ABC):
         sns.set_theme(style="white", context='poster', rc={'figure.figsize': (14, 10)})
         fig, ax = plt.subplots()
 
-        # Create the scatter plot with the custom color palette
-        scatter = sns.scatterplot(
-            data=data, x='x', y='y', hue='compendium', ax=ax, s=100, alpha=0.3, edgecolors='none'
-        )
+        # Dictionary to store scatter plot objects
+        scatter_objects = {}
+
+        # Plot each compendium separately
+        unique_compendia = data['compendium'].unique()
+        for compendium in unique_compendia:
+            subset = data[data['compendium'] == compendium]
+            scatter = sns.scatterplot(data=subset, x='x', y='y', ax=ax, s=100, alpha=1.0, edgecolors='none', label=compendium)
+            scatter_objects[compendium] = scatter  # Store scatter plot object
 
         # Set the title
         ax.set_title(title)
 
         # Customize the legend
         ax.legend(title='Compendium', loc='center left', bbox_to_anchor=(1, 0.5), title_fontsize=14, fontsize=12)
-
-        # Add a descriptive label for each color in the legend
-        for line in scatter.legend_.get_lines():
-            line.set_alpha(1)  # Set legend markers to full opacity
 
         ax.set_title(title, fontsize=16, fontweight='bold')
         ax.grid(True, linestyle='--', alpha=0.5)
