@@ -61,7 +61,6 @@ class BaseLayout(ABC):
         # Customize the legend
         ax.legend(title='Compendium', loc='center left', bbox_to_anchor=(1, 0.5), title_fontsize=14, fontsize=12)
 
-        ax.set_title(title, fontsize=16, fontweight='bold')
         ax.grid(True, linestyle='--', alpha=0.5)
 
         # Save and show the figure
