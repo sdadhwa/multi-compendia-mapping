@@ -6,6 +6,10 @@ import logging
 from layout_algorithms.mcm_umap import MCMUmap
 from config import ScriptConfig, get_config, VALID_CONFIGS
 
+# Set the interactive backend for Matplotlib
+import matplotlib
+matplotlib.use('TkAgg')
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -56,7 +60,7 @@ if __name__ == '__main__':
     figure = MCMUmap.generate_plot(umap_df, "UMAP Plot")
 
     # Show the figure
-    figure.show()
+    plt.show()
 
     # Save the figure
     os.makedirs(config.get_vis_dir_path(), exist_ok=True)

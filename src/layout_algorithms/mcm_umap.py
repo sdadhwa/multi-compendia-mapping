@@ -1,3 +1,4 @@
+from matplotlib.figure import Figure
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import umap
@@ -35,3 +36,13 @@ class MCMUmap(BaseLayout):
 
         return embedding_df
 
+    @classmethod
+    def generate_plot(cls, data: pd.DataFrame, title: str) -> Figure:
+        fig = super().generate_plot(data, title)
+        ax = fig.get_axes()[0]
+
+        # Adjust the axis labels specific to MCMUmap
+        ax.set_xlabel("UMAP_1", fontsize=14)
+        ax.set_ylabel("UMAP_2", fontsize=14)
+
+        return fig
