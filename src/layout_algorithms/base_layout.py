@@ -58,10 +58,11 @@ class BaseLayout(ABC):
         # Set the title
         ax.set_title(title)
 
+        # Set the grid
+        ax.grid(True, linestyle='--', alpha=0.5)
+
         # Customize the legend
         ax.legend(title='Compendium', loc='center left', bbox_to_anchor=(1, 0.5), title_fontsize=14, fontsize=12)
-
-        ax.grid(True, linestyle='--', alpha=0.5)
 
         # Save and show the figure
         plt.tight_layout()
