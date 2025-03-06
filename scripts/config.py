@@ -74,6 +74,17 @@ class ScriptConfig:
         return os.path.join(cls.get_vis_dir_path(), cls.figure_file)
 
     @classmethod
+    def gen_figure_file_path(cls, file_name: str):
+        """
+        Generate a path to a figure file using the file name relative to the project root directory.
+
+        Args:
+            file_name (str): The name of the figure file.
+        """
+        return os.path.join(cls.get_vis_dir_path(), file_name)
+
+
+    @classmethod
     def expression_file_path(cls):
         """
         Get the path to the expression data file relative to the project root directory.
