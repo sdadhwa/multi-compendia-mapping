@@ -5,6 +5,7 @@ import os
 import logging
 from layout_algorithms.mcm_umap import MCMUmap
 from config import ScriptConfig, get_config, VALID_CONFIGS
+from plotting import generate_plot
 
 # Set the interactive backend for Matplotlib
 import matplotlib
@@ -57,7 +58,7 @@ if __name__ == '__main__':
 
     # Generate UMAP figure using the method defined above
     logging.info("Generating UMAP plot...")
-    figure = MCMUmap.generate_plot(umap_df, "UMAP Plot")
+    figure = generate_plot(umap_df, "UMAP Plot")
 
     # Show the figure
     plt.show()
