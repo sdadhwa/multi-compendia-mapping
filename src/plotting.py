@@ -19,7 +19,7 @@ def setup_plot(title: str):
     ax.grid(True, linestyle='--', alpha=0.5)
     return fig, ax
 
-def add_scatter_plots(ax, data: pd.DataFrame, label_column: str):
+def add_scatter_plots(ax, data: pd.DataFrame, label_column: str, unique_labels: list = None):
     """
     Add scatter plots to the axes for each unique label in the specified column.
 
@@ -27,12 +27,14 @@ def add_scatter_plots(ax, data: pd.DataFrame, label_column: str):
         ax (matplotlib.axes.Axes): The axes to add the scatter plots to.
         data (pd.DataFrame): The data containing the plotting coordinates and labels.
         label_column (str): The column name containing the labels.
+        unique_labels (list): A list of unique labels to plot. If None, all unique labels in the data will be plotted.
 
     Returns:
         dict: A dictionary mapping each label to its corresponding scatter plot object.
     """
     scatter_objects = {}
-    unique_labels = data[label_column].unique()
+    if unique_labels is None:
+        unique_labels = data[label_column].unique()
     for label in unique_labels:
         subset = data[data[label_column] == label]
         scatter = ax.scatter(subset['x'], subset['y'], s=100, alpha=1.0, edgecolors='none', label=label)
@@ -77,7 +79,7 @@ def on_legend_click(event, legend_items, fig):
             artist.set_alpha(1 if scatter_obj.get_alpha() == 1 else 0.3)
             fig.canvas.draw_idle()
 
-def generate_compendium_plot(data: pd.DataFrame, title: str):
+def generate_compendium_plot(data: pd.DataFrame, title: str) -> Figure:
     """
     Generate a plot which color codes by compendium of origin. This method creates a scatter plot for each unique
     compendium in the data. It maps each compendium name to its corresponding scatter plot object, allowing for
@@ -95,6 +97,42 @@ def generate_compendium_plot(data: pd.DataFrame, title: str):
 
     fig, ax = setup_plot(title)
     scatter_objects = add_scatter_plots(ax, data, 'compendium')
+    legend, legend_items = customize_legend(ax, scatter_objects)
+
+    fig.canvas.mpl_connect("pick_event", lambda event: on_legend_click(event, legend_items, fig))
+    for text in legend.get_texts():
+        text.set_picker(True)
+
+    plt.tight_layout()
+    return fig
+
+def generate_disease_plot(data: pd.DataFrame, title: str) -> Figure:
+    """
+    Generate a plot where color codes for type of disease.
+
+    Args:
+        data (pd.DataFrame): The layout data. The index should be the sample ids. The columns holding plotting
+            coordinates should be 'x' and 'y'. There needs to be a column 'disease' that holds the type of disease for
+            each sample.
+        title (str): The title of the plot.
+
+    Returns:
+        Figure: The plot figure.
+    """
+    label_column = 'disease'
+
+    # Convert the disease labels to lowercase
+    data[label_column] = data[label_column].str.lower()
+
+    # Count the occurrences of each disease
+    disease_counts = data[label_column].value_counts()
+
+    # Get the top 10 most common diseases
+    top_10_diseases = disease_counts.nlargest(9).index.tolist()
+    top_10_diseases.append('unknown')
+
+    fig, ax = setup_plot(title)
+    scatter_objects = add_scatter_plots(ax, data, 'disease', top_10_diseases)
     legend, legend_items = customize_legend(ax, scatter_objects)
 
     fig.canvas.mpl_connect("pick_event", lambda event: on_legend_click(event, legend_items, fig))
