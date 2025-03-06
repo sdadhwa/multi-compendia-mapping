@@ -77,12 +77,11 @@ def on_legend_click(event, legend_items, fig):
             artist.set_alpha(1 if scatter_obj.get_alpha() == 1 else 0.3)
             fig.canvas.draw_idle()
 
-def generate_plot(data: pd.DataFrame, title: str):
+def generate_compendium_plot(data: pd.DataFrame, title: str):
     """
-    Generate a plot of the data from the fit_transform method.
-
-    This method creates a scatter plot for each unique compendium in the data. It maps each compendium name to its
-    corresponding scatter plot object, allowing for interactive toggling of scatter plot visibility via legend clicks.
+    Generate a plot which color codes by compendium of origin. This method creates a scatter plot for each unique
+    compendium in the data. It maps each compendium name to its corresponding scatter plot object, allowing for
+    interactive toggling of scatter plot visibility via legend clicks.
 
     Parameters:
         data (pd.DataFrame): The layout data. The index should be the sample ids. The columns holding plotting
@@ -93,6 +92,7 @@ def generate_plot(data: pd.DataFrame, title: str):
     Returns:
         Figure: The plot figure.
     """
+
     fig, ax = setup_plot(title)
     scatter_objects = add_scatter_plots(ax, data, 'compendium')
     legend, legend_items = customize_legend(ax, scatter_objects)
