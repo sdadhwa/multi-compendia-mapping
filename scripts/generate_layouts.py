@@ -58,14 +58,19 @@ if __name__ == '__main__':
 
     # Generate UMAP figure using the method defined above
     logging.info("Generating UMAP plot...")
-    figure = generate_disease_plot(umap_df, "UMAP Plot")
+
+    disease_fig = generate_disease_plot(umap_df, "UMAP Disease Plot")
+    compendium_fig = generate_compendium_plot(umap_df, "UMAP Compendium Plot")
 
     # Show the figure
     plt.show()
 
     # Save the figure
     os.makedirs(config.get_vis_dir_path(), exist_ok=True)
-    figure_path = config.get_figure_file_path()
-    figure.savefig(figure_path, dpi=300, bbox_inches='tight')
+    disease_fig_path = config.gen_figure_file_path("umap-disease.png")
+    disease_fig.savefig(disease_fig_path, dpi=300, bbox_inches='tight')
 
-    logging.info(f"UMAP figure saved at: {figure_path}")
+    compendium_fig_path = config.gen_figure_file_path("umap-compendium.png")
+    compendium_fig.savefig(compendium_fig_path, dpi=300, bbox_inches='tight')
+
+    logging.info(f"UMAP figure saved at: {disease_fig_path}")
