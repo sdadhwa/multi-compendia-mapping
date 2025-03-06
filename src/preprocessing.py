@@ -76,5 +76,7 @@ def process_clinical_compendium(clinical_dict):
     # Merge all clinical datasets into a single DataFrame
     compendia_df = pd.concat(clinical_datasets)
 
+    compendia_df['disease'] = compendia_df['disease'].fillna('unknown')
+
     return compendia_df
 
