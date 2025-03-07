@@ -82,7 +82,7 @@ def clinical_dict():
 
     data1 = {
         "patient_id": ["TCGA-ZP-A9CV-01", "TCGA-ZP-A9CY-01", "TCGA-ZP-A9CZ-01"],
-        "disease": ["hepatocellular carcinoma", "hepatocellular carcinoma", "hepatocellular carcinoma"],
+        "disease": ["hepatocellular carcinoma", "hepatocellular carcinoma", None],
         "age": [59, 66, 72],
         "gender": ["male", "female", "male"],
         "project": ["TCGA", "TCGA", "TCGA"],
@@ -235,6 +235,10 @@ def test_process_clinical_compendium(clinical_dict):
         "TCGA-ZP-A9CV-01", "TCGA-ZP-A9CY-01", "TCGA-ZP-A9CZ-01",
         "TCGA-ZP-A9D0-01", "TCGA-ZP-A9D1-01", "TCGA-ZP-A9D2-01"]
     assert all(patient in processed_compendium.index for patient in patients)
+
+    # Check that any None values in the 'disease' column were filled with default for unknown
+    assert not processed_compendium["disease"].isnull().any()
+    assert "unknown" in processed_compendium["disease"].values
 
     # Check that the compendium column is present
     assert "compendium" in processed_compendium.columns
