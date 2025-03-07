@@ -1,9 +1,7 @@
-from matplotlib.figure import Figure
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import umap
 from .base_layout import BaseLayout
-import seaborn as sns
 
 class MCMUmap(BaseLayout):
 
