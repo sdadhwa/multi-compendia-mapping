@@ -14,6 +14,7 @@ class ScriptConfig:
     Attributes:
         project_root (str): The name of the project root directory.
         data_dir (str): The name of the data directory.
+        results_dir (str): The name of the results directory
         raw_data_dir (str): The name of the raw data directory.
         processed_dir (str): The name of the processed data directory.
         expression_file (str): The name of the expression data file.
