@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 import logging
 from layout_algorithms.mcm_umap import MCMUmap
-from config import ScriptConfig, get_config, VALID_CONFIGS
+from config import get_config, VALID_CONFIGS
 from plotting import generate_compendium_plot, generate_disease_plot
 
 # Set the interactive backend for Matplotlib
