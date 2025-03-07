@@ -3,6 +3,34 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import seaborn as sns
 
+"""
+This module provides functions for generating and customizing scatter plots using Matplotlib and Seaborn. The plots can
+be color-coded based on different categories such as compendium of origin or type of disease. The module includes
+functions to set up plots, add scatter plots, customize legends, and handle interactive legend clicks for toggling
+scatter plot visibility.
+
+Functions:
+    setup_plot(title: str) -> tuple:
+        Set up the plot with the given title and return the figure and axes objects.
+
+    add_scatter_plots(ax, data: pd.DataFrame, label_column: str, unique_labels: list = None) -> dict:
+        Add scatter plots to the axes for each unique label in the specified column and return a dictionary mapping each
+        label value to its corresponding scatter plot object.
+
+    customize_legend(ax, scatter_objects: dict) -> tuple:
+        Customize the legend for the scatter plots and return the legend and a dictionary mapping legend text to scatter
+        objects.
+
+    on_legend_click(event, legend_items: dict, fig: Figure):
+        Callback for pick_event to toggle visibility of the scatter plot corresponding to the clicked legend text.
+
+    generate_compendium_plot(data: pd.DataFrame, title: str) -> Figure:
+        Generate a scatter plot color-coded by compendium of origin and return the plot figure.
+
+    generate_disease_plot(data: pd.DataFrame, title: str) -> Figure:
+        Generate a scatter plot color-coded by type of disease and return the plot figure.
+"""
+
 def setup_plot(title: str):
     """
     Set up the plot with the given title.
