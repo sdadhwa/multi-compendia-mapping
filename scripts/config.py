@@ -29,6 +29,7 @@ class ScriptConfig:
     # Get the current file and move up one directory to the project directory
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     data_dir = 'data'
+    results_dir = 'results'
     raw_data_dir = 'raw'
     processed_dir = 'processed'
     visualization_dir = 'vis'
@@ -46,6 +47,13 @@ class ScriptConfig:
         return os.path.join(cls.project_root, cls.data_dir)
 
     @classmethod
+    def results_dir_path(cls):
+        """
+        Get the full path to the results directory.
+        """
+        return os.path.join(cls.project_root, cls.results_dir)
+
+    @classmethod
     def raw_data_dir_path(cls):
         """
         Get the path to the raw data directory relative to the project root directory.
@@ -57,14 +65,14 @@ class ScriptConfig:
         """
         Get the path to the processed data directory relative to the project root directory.
         """
-        return os.path.join(cls.data_dir_path(), cls.processed_dir)
+        return os.path.join(cls.results_dir_path(), cls.processed_dir)
 
     @classmethod
     def get_vis_dir_path(cls):
         """
         Get the path to the visualization directory relative to the project root directory.
         """
-        return os.path.join(cls.data_dir_path(), cls.visualization_dir)
+        return os.path.join(cls.results_dir_path(), cls.visualization_dir)
 
     @classmethod
     def get_figure_file_path(cls):
