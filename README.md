@@ -5,7 +5,7 @@ The project supports:
 - Full multi-compendia mapping
 - Single compendium mapping (for development & testing)
 - Flexible configuration via config.py
-- 
+  
 ## Setting Up the Conda Environment
 
 1. **Create the Conda Environment:**
