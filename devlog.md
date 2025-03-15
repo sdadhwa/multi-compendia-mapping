@@ -8,7 +8,7 @@ Start Date: 2025-01-27
 #### Progress Summary:
 - Implemented core functionality for multi-compendia mapping.
 - Integrated UMAP for dimensionality reduction.
-- Added Scanpy preprocessing to filter least variable 20% of data.
+- Added numpy/pandas preprocessing to filter least variable 20% of data.
 - Refactored pipeline to support modular configurations.
 - Improved visualization options (color-coding clusters by metadata).
 - Optimized UMAP parameters for better separation of clusters.
@@ -23,7 +23,7 @@ Start Date: 2025-01-27
 Supports five biological source types from UCSC Treehouse Public Data.
 Allows full multi-compendia mapping or single-compendium analysis (e.g., PDX_polyA).
 3. Data Processing & Dimensionality Reduction
-Uses Scanpy to preprocess and remove the least variable 20% of the dataset.
+Uses numpy and pandas to preprocess and remove the least variable 20% of the dataset.
 Implements UMAP for high-dimensional gene expression visualization.
 4. Configurable Pipeline
 Configurations set via --config flags (production, pdx_polya, etc.).
