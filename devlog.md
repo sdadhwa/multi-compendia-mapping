@@ -10,10 +10,13 @@ Start Date: 2025-01-27
 - Integrated UMAP for dimensionality reduction.
 - Added Scanpy preprocessing to filter least variable 20% of data.
 - Refactored pipeline to support modular configurations.
+- Improved visualization options (color-coding clusters by metadata).
+- Optimized UMAP parameters for better separation of clusters.
 
 #### Next Steps:
-- Improve visualization options (color-coding clusters by metadata).
-- Optimize UMAP parameters for better separation of clusters.
+- Implement patient-specific sequence analysis by plotting data by patient ID.
+- Explore alternative visualization methods beyond UMAP to improve analysis of smaller datasets.
+- Expand dataset comparisons using different clinical variables.
 
 #### Key Features Implemented:
 1. Multi-Compendia Gene Mapping
@@ -31,7 +34,7 @@ Processing step: Cleans, normalizes, and structures expression data.
 Layout generation step: Applies UMAP and outputs cluster mappings.
 6. Output & Visualization
 Outputs TSV and UMAP files with structured gene mappings.
-Uses Matplotlib & Seaborn to generate UMAP plots.
+Uses Matplotlib & Seaborn to generate UMAP plots with legend, option to toggle dataset visibility.
 7. Environment & Reproducibility
 Conda environment (mcomp-mapping-env) ensures dependency consistency.
 Setup simplified using environment.yml.
@@ -45,16 +48,20 @@ See README for setup and running instructions.
 ### Timeline
 
 #### Completed Milestones:
--Initial setup & repo structure (YYYY-MM-DD)
--Basic processing pipeline for gene expression data (YYYY-MM-DD)
--Integration of Scanpy for preprocessing (YYYY-MM-DD)
--UMAP-based dimensionality reduction implemented (YYYY-MM-DD)
-
+-Initial setup & repo structure (2025-01-30)
+- Dataset retrieval pipeline implemented (2025-02-06)
+- Preprocessing pipeline integrated (gene filtering & normalization) (2025-02-28)
+- UMAP-based dimensionality reduction applied to compendia (2025-02-28)
+- First UMAP visualizations generated & reviewed (2025-02-28)
+- Scanpy integrated for preprocessing & filtering (YYYY-MM-DD)
+- Refactored pipeline to support modular configurations (2025-02-25)
+- Evaluation of dataset mixing across five compendium types (2025-03-06)
+- Validation of clustering consistency across different UMAP parameters (2025-03-06)
+- GitHub repository documentation & initial release (2025-02-27)
+  
 #### Upcoming Features & Enhancements:
--Improve visualization with metadata color mapping (ETA: YYYY-MM-DD)
--Optimize UMAP hyperparameters for better clustering (ETA: YYYY-MM-DD)
--Implement alternative clustering methods (Leiden, HDBSCAN) (ETA: YYYY-MM-DD)
--Benchmark performance on larger datasets (ETA: YYYY-MM-DD)
+-Implement alternative clustering methods (Leiden, HDBSCAN)
+-Benchmark performance on larger datasets 
 
 
 ### Challenges & Solutions:
