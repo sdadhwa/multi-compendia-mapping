@@ -128,6 +128,6 @@ Push to the branch (git push origin feature-branch).
 
 Submit a pull request.
 
-### License [needs updates]
+### License
 
 This project is licensed under an MIT license. See LICENSE file for details.
