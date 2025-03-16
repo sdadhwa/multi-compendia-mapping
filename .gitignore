@@ -1,0 +1,10 @@
+# Ignore all data and result files
+data/
+results/
+
+# Allow tracking of empty directories
+!data/.gitkeep
+!results/.gitkeep
+
+# Ignore egg-info directories
+*.egg-info/
